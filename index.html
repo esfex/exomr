@@ -187,9 +187,14 @@
       transition: opacity 0.2s ease;
     }
 
-    .cta.is-animating .progress {
+    .cta.is-progress .progress {
       opacity: 1;
-      animation: sweep 0.5s ease-out forwards;
+      animation: sweep 3.6s linear infinite;
+    }
+
+    .cta.is-animating .progress {
+      opacity: 0;
+      animation: none;
     }
 
     @keyframes sweep {
@@ -336,8 +341,19 @@
       setTimeout(() => startBtn?.classList.remove("is-animating"), 600);
     };
 
-    setInterval(swapWord, 4100); // 500ms animation + ~3.6s pause
-    swapWord();
+    const pauseDuration = 3600;
+    const typingDuration = 500;
+
+    const runCycle = () => {
+      startBtn?.classList.add("is-progress");
+      setTimeout(() => {
+        startBtn?.classList.remove("is-progress");
+        swapWord();
+        setTimeout(runCycle, typingDuration);
+      }, pauseDuration);
+    };
+
+    runCycle();
 
     const onPullStart = (e) => {
       if (window.scrollY > 0) {
