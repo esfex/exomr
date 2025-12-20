@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#0c1830">
   <title>صرافی اسفندیاری | مینی‌اپ تلگرام</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
@@ -23,11 +23,11 @@
     }
 
     :root {
-      --bg: #0f172a;
+      --bg: #0c1830;
       --text: #e9eff8;
-      --muted: #b7c6dd;
-      --accent: #34bef3;
-      --accent-strong: #2bd18c;
+      --muted: #b2c4e4;
+      --accent: #3cb7ff;
+      --accent-strong: #2dd1a2;
     }
 
     * { box-sizing: border-box; }
@@ -36,7 +36,7 @@
       margin: 0;
       min-height: 100vh;
       font-family: "IRYekan", "Tahoma", sans-serif;
-      background: linear-gradient(145deg, rgba(52, 190, 243, 0.12), rgba(43, 209, 140, 0.12)),
+      background: linear-gradient(145deg, rgba(60, 183, 255, 0.18), rgba(45, 209, 162, 0.12)),
         radial-gradient(120% 80% at 20% 10%, rgba(255, 255, 255, 0.05), transparent),
         var(--bg);
       color: var(--text);
@@ -91,6 +91,7 @@
 
     .track {
       display: flex;
+      width: 100%;
       direction: ltr;
       transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
       will-change: transform;
@@ -98,11 +99,13 @@
 
     .slide {
       flex: 0 0 100%;
+      min-width: 100%;
       direction: rtl;
       padding: 18px 16px 22px;
       display: grid;
       gap: 12px;
       min-height: 240px;
+      box-sizing: border-box;
     }
 
     .slide h2 {
@@ -155,7 +158,6 @@
       height: 7px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.18);
-      transition: width 0.3s ease, background 0.3s ease;
     }
 
     .dot.is-active {
@@ -227,8 +229,8 @@
       <button class="next" type="button" id="next-btn" aria-label="اسلاید بعدی">بعدی</button>
     </div>
 
-        <div class="note">
-      تراکنش‌ها با بالاترین سطح امنیت چندلایه، مطابق استانداردهای بانکی و در زیرساختی هم‌تراز امن‌ترین نهادهای مالی جهان پردازش می‌شوند.
+                <div class="note">
+      تراکنش‌ها با کارمزد پایین و امنیت چندلایه انجام می‌شود و نتیجه قطعی در حساب شما داخل تلگرام نمایش داده می‌شود.
     </div>
   </div>
 
@@ -241,18 +243,9 @@
     const startBtn = document.getElementById("start-btn");
     let index = 0;
 
-    if (track) {
-      track.style.width = `${slides.length * 100}%`;
-      const slideWidth = 100 / slides.length;
-      slides.forEach((slide) => (slide.style.width = `${slideWidth}%`));
-    }
-
     const setIndex = (i) => {
       index = Math.max(0, Math.min(i, slides.length - 1));
-      if (track) {
-        const step = 100 / slides.length;
-        track.style.transform = `translate3d(-${index * step}%, 0, 0)`;
-      }
+      if (track) track.style.transform = `translate3d(-${index * 100}%, 0, 0)`;
       dots.forEach((dot, idx) => dot.classList.toggle("is-active", idx === index));
       if (nextBtn) nextBtn.disabled = index === slides.length - 1;
     };
