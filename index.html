@@ -152,6 +152,8 @@
       margin: 0px auto 6px;
       text-align: center;
       width: fit-content;
+      position: relative;
+      overflow: hidden;
     }
 
     .cta:active {
@@ -171,6 +173,28 @@
       display: inline-flex;
       gap: 6px;
       margin-top: 6px;
+    }
+
+    .cta .progress {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: 2px;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+      transform: translateX(100%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .cta.is-animating .progress {
+      opacity: 1;
+      animation: sweep 0.5s ease-out forwards;
+    }
+
+    @keyframes sweep {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
     }
 
     @keyframes floaty {
@@ -228,20 +252,20 @@
           <h2>تبدیل فوری</h2>
           <p>خرید و فروش در بستری امن با فرآیند ساده، پشتیبانی ۲۴ ساعته و تسویه مطمئن</p>
         </article>
-        <article class="slide" aria-label="کیف پول ساده">
-          <h2>واریز و برداشت ریال عمانی</h2>
-          <p>واریز و برداشت ریال عمانی با کارت‌های بانکی عمانی (بانک مسقط، ظفار، صحار)</p>
+        <article class="slide" aria-label="کیف پول">
+          <h2>کیف پول مطمئن</h2>
+          <p>واریز و برداشت ریال با کارت‌های بانکی عمان (بانک مسقط، ظفار، صحار و ...)</p>
         </article>
-        <article class="slide" aria-label="شروع آسان">
+        <article class="slide" aria-label="بهترین نرخ">
           <h2>تضمین بهترین نرخ</h2>
-          <p> نرخ لحظه‌ای بر اساس آخرین نرخ‌ رسمی دلار تهران و بدون کارمزد پنهان</p>
+          <p> نرخ لحظه‌ای بر اساس آخرین معاملات رسمی دلار تهران و بدون کارمزد پنهان</p>
           
         </article>
       </div>
     </section>
 
-
-    <button class="cta" type="button" id="start-btn" aria-label="ثبت نام" style="justify-self:center; margin:0 auto 5px; display:block; text-align:center;">ثبت نام و <span id="cta-dynamic">خرید</span></button>
+    <button class="cta" type="button" id="start-btn" aria-label="ثبت نام" style="justify-self:center; margin:0 auto 5px; display:block; text-align:center;">ثبت نام و <span id="cta-dynamic">خرید</span><span class="progress"></span></button>
+    <button class="cta" type="button" id="start-btn" aria-label="ثبت نام" style="justify-self:center; margin:0 auto 5px; display:block; text-align:center;">ثبت نام و <span id="cta-dynamic">خرید</span><span class="progress"></span></button>
 
         <div class="controls">
 
