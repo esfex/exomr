@@ -59,6 +59,8 @@
       align-items: center;
       transition: transform 0.2s ease;
       will-change: transform;
+      position: relative;
+      padding-bottom: 110px;
     }
 
     .logo-wrap {
@@ -107,24 +109,26 @@
       flex: 0 0 100%;
       min-width: 100%;
       direction: rtl;
-      padding: 18px 16px 22px;
+      padding: 14px 14px 16px;
       display: grid;
-      gap: 12px;
-      min-height: 240px;
+      gap: 8px;
+      min-height: auto;
       box-sizing: border-box;
+      align-content: start;
     }
 
     .slide h2 {
       margin: 0 0 2px;
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       text-align: center;
+      line-height: 1.2;
     }
 
     .slide p {
-      margin: 2px 0 0;
+      margin: 0;
       color: var(--muted);
-      line-height: 1.6;
-      font-size: 0.94rem;
+      line-height: 1.5;
+      font-size: 0.93rem;
       text-align: center;
     }
 
@@ -152,14 +156,14 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 8px;
       justify-content: center;
     }
 
     .dots {
       display: inline-flex;
       gap: 6px;
-      margin-top: 2px;
+      margin-top: 6px;
     }
 
     .dot {
@@ -176,21 +180,17 @@
     }
 
     .note {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
       color: var(--muted);
       font-size: 0.88rem;
-      line-height: 1.6;
-      margin-top: 6px;
-      width:100%;
-    }
-
-    .note span{
-      padding:5px 0;
-      font-weight: 700;
-      display:block;
+      line-height: 1.55;
       text-align: center;
-      width:100%;
-
     }
+
+    
     @media (prefers-reduced-motion: reduce) {
       .track, .dot, .cta { transition: none; }
     }
