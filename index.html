@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
@@ -57,14 +57,14 @@
     .logo-wrap {
       display: grid;
       place-items: center;
-      width: 120px;
-      height: 120px;
+      width: 140px;
+      height: 140px;
       margin: 4px 0 6px;
     }
 
     .logo {
-      width: 110px;
-      height: 110px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -91,7 +91,6 @@
 
     .track {
       display: flex;
-      width: 100%;
       direction: ltr;
       transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
       will-change: transform;
@@ -106,27 +105,18 @@
       min-height: 240px;
     }
 
-    .icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      color: var(--accent);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
     .slide h2 {
       margin: 0;
-      font-size: 1.12rem;
+      font-size: 1.15rem;
+      text-align: center;
     }
 
     .slide p {
-      margin: 0;
+      margin: 4px 0 0;
       color: var(--muted);
-      line-height: 1.7;
+      line-height: 1.65;
       font-size: 0.94rem;
+      text-align: center;
     }
 
     .cta {
@@ -213,17 +203,14 @@
     <section class="viewport" aria-label="ویژگی‌ها" role="group">
       <div class="track" data-track>
         <article class="slide" aria-label="تبدیل سریع">
-          <div class="icon" aria-hidden="true"></div>
           <h2>تبدیل فوری</h2>
           <p>نرخ لحظه‌ای و کارمزد مشخص؛ ریال و تتر را در چند ثانیه جابه‌جا کنید.</p>
         </article>
         <article class="slide" aria-label="کیف پول ساده">
-          <div class="icon" aria-hidden="true"></div>
           <h2>کیف پول ساده</h2>
           <p>واریز و برداشت با کارت یا تتر، پیگیری وضعیت در همان چت و اعلان فوری پس از انجام.</p>
         </article>
         <article class="slide" aria-label="شروع آسان">
-          <div class="icon" aria-hidden="true"></div>
           <h2>ثبت‌نام و شروع</h2>
           <p>عضویت کوتاه، پشتیبانی درون تلگرام و تسویه مطمئن. برای شروع آماده‌اید؟</p>
           <button class="cta" type="button" id="start-btn" aria-label="شروع ثبت‌نام">ثبت‌نام و شروع</button>
@@ -240,8 +227,8 @@
       <button class="next" type="button" id="next-btn" aria-label="اسلاید بعدی">بعدی</button>
     </div>
 
-    <div class="note">
-      این صفحه فقط معرفی است. تسویه و ثبت نهایی در سرورهای صرافی اسفندیاری انجام می‌شود و نتیجه در حساب شما نمایش داده می‌شود.
+        <div class="note">
+      تراکنش‌ها با کارمزد پایین و امنیت چندلایه انجام می‌شود و نتیجه قطعی در حساب شما داخل تلگرام نمایش داده می‌شود.
     </div>
   </div>
 
@@ -254,9 +241,18 @@
     const startBtn = document.getElementById("start-btn");
     let index = 0;
 
+    if (track) {
+      track.style.width = `${slides.length * 100}%`;
+      const slideWidth = 100 / slides.length;
+      slides.forEach((slide) => (slide.style.width = `${slideWidth}%`));
+    }
+
     const setIndex = (i) => {
       index = Math.max(0, Math.min(i, slides.length - 1));
-      if (track) track.style.transform = `translate3d(-${index * 100}%, 0, 0)`;
+      if (track) {
+        const step = 100 / slides.length;
+        track.style.transform = `translate3d(-${index * step}%, 0, 0)`;
+      }
       dots.forEach((dot, idx) => dot.classList.toggle("is-active", idx === index));
       if (nextBtn) nextBtn.disabled = index === slides.length - 1;
     };
