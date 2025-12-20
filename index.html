@@ -314,6 +314,7 @@
 
     const swapWord = () => {
       if (!ctaDynamic) return;
+      startBtn?.classList.add("is-animating");
       const current = words[wordIndex];
       const next = words[(wordIndex + 1) % words.length];
       const steps = [...current].length + [...next].length || 1;
@@ -331,6 +332,8 @@
           if (i === next.length - 1) wordIndex = (wordIndex + 1) % words.length;
         }, stepTime * (current.length + i + 1));
       });
+
+      setTimeout(() => startBtn?.classList.remove("is-animating"), 600);
     };
 
     setInterval(swapWord, 4100); // 500ms animation + ~3.6s pause
