@@ -73,19 +73,6 @@
       overflow: visible;
     }
 
-    .logo-wrap::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      padding: 3px;
-      background: conic-gradient(from 0deg, rgba(60,183,255,0.8), rgba(45,209,162,0.8), rgba(60,183,255,0.8));
-      mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-      animation: spin-border 6s linear infinite;
-      pointer-events: none;
-    }
-
     .logo {
       width: 140px;
       height: 140px;
@@ -95,7 +82,21 @@
       display: grid;
       place-items: center;
       box-shadow: 0 16px 36px rgba(52, 189, 243, 0.162);
+      position: relative;
       animation: floaty 12s ease-in-out infinite alternate;
+    }
+
+    .logo::before {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #ff9f0a, #ffd60a, #34c759, #0a84ff, #bf5af2, #ff2d55, #ff9f0a);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+      animation: spin-border 8s linear infinite;
+      z-index: 0;
+      pointer-events: none;
     }
 
     .logo img {
