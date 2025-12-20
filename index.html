@@ -133,7 +133,7 @@
     }
 
     .cta {
-      justify-self: start;
+      justify-self: center;
       padding: 14px 18px;
       border: none;
       border-radius: 14px;
@@ -145,6 +145,10 @@
       cursor: pointer;
       box-shadow: 0 12px 26px rgba(42, 211, 139, 0.22);
       transition: transform 0.15s ease, box-shadow 0.2s ease;
+      display: block;
+      margin: 8px auto 6px;
+      text-align: center;
+      width: fit-content;
     }
 
     .cta:active {
@@ -158,13 +162,6 @@
       gap: 8px;
       margin-top: 8px;
       justify-content: center;
-    }
-
-    .cta {
-      justify-self: center;
-      margin: 0 auto 5px;
-      display: block;
-      text-align: center;
     }
 
     .dots {
@@ -223,7 +220,7 @@
       <div class="track" data-track>
         <article class="slide" aria-label="تبدیل سریع">
           <h2>تبدیل فوری</h2>
-          <p>خرید و فروش در بستری امن با فرآیند ساده، پشتیبانی ۲۴ ساعته و تسویه مطمئن.</p>
+          <p>خرید و فروش در بستری امن با فرآیند ساده، پشتیبانی ۲۴ ساعته و تسویه مطمئن</p>
         </article>
         <article class="slide" aria-label="کیف پول ساده">
           <h2>واریز و برداشت ریال عمانی</h2>
@@ -231,7 +228,7 @@
         </article>
         <article class="slide" aria-label="شروع آسان">
           <h2>تضمین بهترین نرخ</h2>
-          <p> نرخ لحظه‌ای بر اساس آخرین نرخ‌ رسمی دلار تهران و بدون کارمزد پنهان.</p>
+          <p> نرخ لحظه‌ای بر اساس آخرین نرخ‌ رسمی دلار تهران و بدون کارمزد پنهان</p>
           
         </article>
       </div>
@@ -241,7 +238,7 @@
 
     </div>
 
-    <button class="cta" type="button" id="start-btn" aria-label="???? ???????" style="justify-self:center; margin:0 auto 5px; display:block; text-align:center;">??????? ? ????</button>
+    <button class="cta" type="button" id="start-btn" aria-label="ثبت نام" style="justify-self:center; margin:0 auto 5px; display:block; text-align:center;">ثبت نام و <span id="cta-dynamic">خرید</span></button>
 
     <div class="note">
       © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳
@@ -257,6 +254,7 @@
     const slides = Array.from(document.querySelectorAll(".slide"));
     const dots = Array.from(document.querySelectorAll(".dot"));
     const startBtn = document.getElementById("start-btn");
+    const ctaDynamic = document.getElementById("cta-dynamic");
     const layout = document.querySelector(".layout");
     let index = 0;
     let pullStartY = 0;
@@ -276,6 +274,32 @@
 
     startAutoplay();
     setIndex(0);
+
+    const words = ["خرید", "فروش"];
+    let wordIndex = 0;
+
+    const swapWord = () => {
+      if (!ctaDynamic) return;
+      const current = words[wordIndex];
+      const next = words[(wordIndex + 1) % words.length];
+      const steps = [...current].length + [...next].length || 1;
+      const stepTime = 500 / steps;
+
+      [...current].forEach((_, i) => {
+        setTimeout(() => {
+          ctaDynamic.textContent = current.slice(0, current.length - (i + 1));
+        }, stepTime * (i + 1));
+      });
+
+      [...next].forEach((_, i) => {
+        setTimeout(() => {
+          ctaDynamic.textContent = next.slice(0, i + 1);
+          if (i === next.length - 1) wordIndex = (wordIndex + 1) % words.length;
+        }, stepTime * (current.length + i + 1));
+      });
+    };
+
+    setInterval(swapWord, 4100); // 500ms animation + ~3.6s pause
 
     const onPullStart = (e) => {
       if (window.scrollY > 0) {
