@@ -183,12 +183,19 @@
       position: fixed;
       left: 16px;
       right: 16px;
-      bottom: calc(12px + env(safe-area-inset-bottom));
+      bottom: calc(0px + env(safe-area-inset-bottom));
       color: var(--muted);
       font-size: 0.88rem;
       line-height: 1.55;
       text-align: center;
       pointer-events: none;
+    }
+
+    #start-btn {
+      position: fixed;
+      left: 24px;
+      right: 24px;
+      bottom: calc(20px + env(safe-area-inset-bottom));
     }
 
     
@@ -209,7 +216,7 @@
       <div class="track" data-track>
         <article class="slide" aria-label="تبدیل سریع">
           <h2>تبدیل فوری</h2>
-          <p>خرید و فروش در بستری امن با فرآیند ساده، پشتیبانی 24/7 و تسویه مطمئن.</p>
+          <p>خرید و فروش در بستری امن با فرآیند ساده، پشتیبانی ۲۴ ساعته و تسویه مطمئن.</p>
         </article>
         <article class="slide" aria-label="کیف پول ساده">
           <h2>واریز و برداشت ریال عمانی</h2>
@@ -217,18 +224,14 @@
         </article>
         <article class="slide" aria-label="شروع آسان">
           <h2>تضمین بهترین نرخ</h2>
-          <p> به‌صورت لحظه‌ای و بر اساس آخرین نرخ‌ رسمی معاملات دلار و بدون کارمزد پنهان، به‌عنوان نرخ نهایی اعمال می‌شوند.</p>
+          <p> نرخ لحظه‌ای بر اساس آخرین نرخ‌ رسمی دلار تهران و بدون کارمزد پنهان.</p>
           
         </article>
       </div>
     </section>
 
         <div class="controls">
-      <div class="dots" aria-hidden="true">
-        <span class="dot is-active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+
     </div>
 
     <button class="cta" type="button" id="start-btn" aria-label="شروع ثبت‌نام">ثبت‌نام و شروع</button>
@@ -261,7 +264,7 @@
 
     const startAutoplay = () => {
       clearInterval(autoplay);
-      autoplay = setInterval(() => setIndex(index + 1), 3200);
+      autoplay = setInterval(() => setIndex(index + 1), 4200);
     };
 
     startAutoplay();
