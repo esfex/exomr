@@ -66,9 +66,11 @@
     .logo-wrap {
       display: grid;
       place-items: center;
-      width: 140px;
-      height: 140px;
+      width: 160px;
+      height: 160px;
       margin: 4px 0 6px;
+      position: relative;
+      overflow: visible;
     }
 
     .logo {
@@ -80,6 +82,7 @@
       display: grid;
       place-items: center;
       box-shadow: 0 16px 36px rgba(52, 189, 243, 0.162);
+      animation: floaty 12s ease-in-out infinite alternate;
     }
 
     .logo img {
@@ -170,6 +173,14 @@
       margin-top: 6px;
     }
 
+    @keyframes floaty {
+      0% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+      25% { transform: translate3d(6px, -4px, 0) rotate(0deg); }
+      50% { transform: translate3d(-5px, 6px, 0) rotate(1deg); }
+      75% { transform: translate3d(4px, 3px, 0) rotate(-0.5deg); }
+      100% { transform: translate3d(-4px, -5px, 0) rotate(0deg); }
+    }
+
     .dot {
       width: 7px;
       height: 7px;
@@ -193,6 +204,7 @@
       line-height: 1.55;
       text-align: center;
       pointer-events: none;
+      opacity:0.69;
     }
 
 
@@ -242,7 +254,8 @@
   </div>
 
 <div class="note">
-      © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳
+  © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳
+
 
     </div>
 
