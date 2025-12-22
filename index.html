@@ -513,7 +513,7 @@
       window.Telegram?.WebApp?.expand?.();
       setResult("Testing API...");
 
-      fetch("/api/me?telegram_user_id=123")
+      fetch("https://cf-init.esfex.workers.dev/api/me?telegram_user_id=123")
         .then((res) => {
           console.log("API status:", res.status);
           return res
