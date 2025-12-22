@@ -362,6 +362,7 @@
     let pulling = false;
     let autoplay;
 
+    console.log("UI loaded");
     const setIndex = (i) => {
       index = ((i % slides.length) + slides.length) % slides.length;
       if (track) track.style.transform = `translate3d(-${index * 100}%, 0, 0)`;
@@ -510,7 +511,26 @@
         window.Telegram.WebApp.MainButton.show();
       }
       window.Telegram?.WebApp?.expand?.();
-      verifyTelegramUser();
+      setResult("Testing API...");
+
+      fetch("/api/me?telegram_user_id=123")
+        .then((res) => {
+          console.log("API status:", res.status);
+          return res
+            .json()
+            .then((data) => ({ status: res.status, data }))
+            .catch(() => ({ status: res.status, data: null }));
+        })
+        .then(({ status, data }) => {
+          console.log("API data:", data);
+          const body = data ? JSON.stringify(data, null, 2) : "[no JSON body]";
+          setResult(`API status: ${status}\n${body}`, status >= 400);
+        })
+        .catch((err) => {
+          console.error("API error:", err);
+          const message = err?.message ? `API error: ${err.message}` : "API error";
+          setResult(message, true);
+        });
     });
 
     const applyTheme = () => {
