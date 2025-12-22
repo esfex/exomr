@@ -492,7 +492,7 @@
           setResult(payload?.error || "Verification failed", true);
         }
       } catch (err) {
-        setResult("Network or server error", true);
+        setResult(err, true);
       }
     };
 
