@@ -1,120 +1,471 @@
 <!doctype html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Telegram Auth Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c1830">
+  <title>صرافی اسفندیاری | مینی‌اپ تلگرام</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body{
-      margin:0;
-      background:#000;
-      color:#00ff66;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      padding:16px;
+    @font-face {
+      font-family: "IRYekan";
+      src: url("./fonts/IRANYekanXFaNum-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
     }
-    .box{
-      border:1px solid #00ff66;
-      border-radius:12px;
-      padding:14px;
-      margin-top:12px;
-      white-space:pre-wrap;
-      word-break:break-word;
-      line-height:1.5;
+    @font-face {
+      font-family: "IRYekan";
+      src: url("./fonts/IRANYekanXFaNum-Bold.ttf") format("truetype");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
     }
-    .dim{ opacity:.8; }
-    .bad{ color:#ff4d4d; border-color:#ff4d4d; }
-    button{
-      margin-top:12px;
-      background:#00ff66;
-      color:#000;
-      border:0;
-      padding:10px 14px;
-      border-radius:10px;
-      font-weight:700;
-      cursor:pointer;
+
+    :root {
+      --bg: #0c1830;
+      --text: #e9eff8;
+      --muted: #b2c4e4;
+      --accent: #3cb7ff;
+      --accent-strong: #2dd1a2;
     }
-    button:active{ transform: translateY(1px); }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IRYekan", "Tahoma", sans-serif;
+      background: linear-gradient(145deg, rgba(60, 183, 255, 0.18), rgba(45, 209, 162, 0.12)),
+        radial-gradient(120% 80% at 20% 10%, rgba(255, 255, 255, 0.05), transparent),
+        var(--bg);
+      color: var(--text);
+      padding: calc(18px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .layout {
+      width: min(520px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      transition: transform 0.2s ease;
+      will-change: transform;
+      position: relative;
+      padding-bottom: 110px;
+    }
+
+    .logo-wrap {
+      display: grid;
+      place-items: center;
+      width: 160px;
+      height: 160px;
+      margin: 4px 0 6px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .logo {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: visible;
+      background: rgba(255, 255, 255, 0.06);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 16px 36px rgba(52, 189, 243, 0.162);
+      position: relative;
+      animation: floaty 12s ease-in-out infinite alternate;
+    }
+
+    .logo::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--accent-strong), #030897, var(--accent-strong), var(--accent), #030897, var(--accent), #030897);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
+      filter: blur(36px);
+      animation: spin-border 0.6s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .logo img {
+      position: relative;
+      z-index: 2;
+      border-radius: 50%;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .viewport {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      background: transparent;
+      border: none;
+      touch-action: pan-y;
+    }
+
+    .track {
+      display: flex;
+      width: 100%;
+      direction: ltr;
+      transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+      will-change: transform;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      min-width: 100%;
+      direction: rtl;
+      padding: 14px 14px 16px;
+      display: grid;
+      gap: 8px;
+      min-height: auto;
+      box-sizing: border-box;
+      align-content: start;
+    }
+
+    .slide h2 {
+      margin: 0 0 2px;
+      font-size: 1.12rem;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .slide p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.93rem;
+      text-align: center;
+    }
+
+    .cta {
+      justify-self: center;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #0c1729;
+      font-weight: 700;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(42, 211, 139, 0.22);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      display: block;
+      margin: 0px auto 6px;
+      text-align: center;
+      width: fit-content;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta:active {
+      transform: translateY(1px);
+      box-shadow: 0 10px 20px rgba(42, 211, 139, 0.2);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      justify-content: center;
+    }
+
+    .dots {
+      display: inline-flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .cta .progress {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(0,166,228,0) 0%, rgba(0,166,228,0.9) 50%, rgba(3,8,151,0) 100%);
+      transform: translateX(100%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .cta.is-progress .progress {
+      opacity: 1;
+      animation: sweep 3.6s linear infinite;
+    }
+
+    .cta.is-animating .progress {
+      opacity: 0;
+      animation: none;
+    }
+
+    .cta .premium-bar {
+      position: absolute;
+      top: -4px;
+      bottom: -4px;
+      left: -6px;
+      width: 14px;
+      background: linear-gradient(90deg, rgba(0,166,228,0) 0%, rgba(0,166,228,0.9) 50%, rgba(3,8,151,0) 100%);
+      opacity: 0;
+      filter: blur(1px);
+      transform: translateX(-100%);
+    }
+
+    .cta.is-animating .premium-bar {
+      opacity: 1;
+      animation: sweep-badge 0.5s ease-out forwards;
+    }
+
+    @keyframes sweep {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    @keyframes sweep-badge {
+      from { transform: translateX(-100%); opacity: 0.85; }
+      to { transform: translateX(420%); opacity: 0; }
+    }
+
+    @keyframes floaty {
+      0% { transform: translate3d(0, 0, 0) rotate(-1deg); box-shadow: 0 16px 36px rgba(52, 189, 243, 0.162);}
+      25% { transform: translate3d(6px, -4px, 0) rotate(0deg); box-shadow: 0 16px 36px rgba(0, 4, 152, 0.25);}
+      50% { transform: translate3d(-5px, 6px, 0) rotate(1deg); box-shadow: 0 16px 36px rgba(52, 189, 243, 0.162);}
+      75% { transform: translate3d(4px, 3px, 0) rotate(-0.5deg); box-shadow: 0 16px 36px rgba(0, 165, 225, 0.25);}
+      100% { transform: translate3d(-4px, -5px, 0) rotate(0deg); box-shadow: 0 16px 36px rgba(52, 189, 243, 0.162);}
+    }
+
+    @keyframes spin-border {
+      to { transform: rotate(360deg); }
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .dot.is-active {
+      width: 18px;
+      background: var(--accent);
+      box-shadow: 0 6px 14px rgba(52, 190, 243, 0.3);
+    }
+
+    .note {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 24px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      text-align: center;
+      pointer-events: none;
+      opacity:0.69;
+    }
+
+
+    
+    @media (prefers-reduced-motion: reduce) {
+      .track, .dot, .cta { transition: none; }
+    }
   </style>
 </head>
 <body>
-  <h2 style="margin:0 0 8px 0;">Telegram initData Verification</h2>
-  <div class="dim">Open this page inside Telegram Mini App.</div>
+  <div class="layout">
+    <div class="logo-wrap">
+      <div class="logo">
+        <img src="./esf_modern.png" alt="لوگوی صرافی اسفندیاری">
+      </div>
+    </div>
 
-  <button id="btn">Test /api/auth/telegram</button>
+    <section class="viewport" aria-label="ویژگی‌ها" role="group">
+      <div class="track" data-track>
+        <article class="slide" aria-label="تبدیل سریع">
+          <h2>تبدیل فوری</h2>
+          <p>خرید و فروش در بستری امن با فرآیند ساده، پشتیبانی ۲۴ ساعته و تسویه مطمئن</p>
+        </article>
+        <article class="slide" aria-label="کیف پول">
+          <h2>کیف پول مطمئن</h2>
+          <p>واریز و برداشت امن با کارت‌های بانکی عمان <br /> (بانک مسقط، ظفار، صحار و ...)</p>
+        </article>
+        <article class="slide" aria-label="بهترین نرخ">
+          <h2>تضمین بهترین نرخ</h2>
+          <p> نرخ لحظه‌ای بر اساس آخرین معاملات رسمی دلار تهران و بدون کارمزد پنهان</p>
+          
+        </article>
+      </div>
+    </section>
 
-  <div id="status" class="box dim">Idle.</div>
-  <div id="out" class="box" style="display:none;"></div>
+    <button class="cta" type="button" id="start-btn" aria-label="ثبت نام" style="justify-self:center; margin:0 auto 5px; display:block; text-align:center;">ثبت نام و <span id="cta-dynamic">خرید</span><span class="progress"></span><span class="premium-bar"></span></button>
+
+        <div class="controls">
+
+    </div>
+    
+
+    </div>
+
+    
+  </div>
+
+<div class="note">
+  © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳
+
+
+    </div>
 
   <script>
-    // ✅ Replace this with your real Worker URL
-    const WORKER_URL = "https://cf-init.esfex.workers.dev/api/auth/telegram";
+    const root = document.documentElement;
+    const track = document.querySelector("[data-track]");
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dots = Array.from(document.querySelectorAll(".dot"));
+    const startBtn = document.getElementById("start-btn");
+    const ctaDynamic = document.getElementById("cta-dynamic");
+    const layout = document.querySelector(".layout");
+    let index = 0;
+    let pullStartY = 0;
+    let pulling = false;
+    let autoplay;
 
-    const statusEl = document.getElementById("status");
-    const outEl = document.getElementById("out");
-    const btn = document.getElementById("btn");
+    const setIndex = (i) => {
+      index = ((i % slides.length) + slides.length) % slides.length;
+      if (track) track.style.transform = `translate3d(-${index * 100}%, 0, 0)`;
+      dots.forEach((dot, idx) => dot.classList.toggle("is-active", idx === index));
+    };
 
-    function setStatus(text, isError=false){
-      statusEl.textContent = text;
-      statusEl.className = "box" + (isError ? " bad" : " dim");
-    }
+    const startAutoplay = () => {
+      clearInterval(autoplay);
+      autoplay = setInterval(() => setIndex(index + 1), 4200);
+    };
 
-    function showOutput(text, isError=false){
-      outEl.style.display = "block";
-      outEl.textContent = text;
-      outEl.className = "box" + (isError ? " bad" : "");
-    }
+    startAutoplay();
+    setIndex(0);
 
-    btn.addEventListener("click", async () => {
-      outEl.style.display = "none";
-      showOutput("", false);
+    const words = ["خرید", "فروش"];
+    let wordIndex = 0;
 
-      // Telegram object exists only inside Telegram WebView
-      if (!window.Telegram || !Telegram.WebApp) {
-        setStatus("ERROR: Telegram.WebApp not found. Open inside Telegram.", true);
+    const swapWord = () => {
+      if (!ctaDynamic) return;
+      startBtn?.classList.add("is-animating");
+      const current = words[wordIndex];
+      const next = words[(wordIndex + 1) % words.length];
+      const steps = [...current].length + [...next].length || 1;
+      const stepTime = 500 / steps;
+
+      [...current].forEach((_, i) => {
+        setTimeout(() => {
+          ctaDynamic.textContent = current.slice(0, current.length - (i + 1));
+        }, stepTime * (i + 1));
+      });
+
+      [...next].forEach((_, i) => {
+        setTimeout(() => {
+          ctaDynamic.textContent = next.slice(0, i + 1);
+          if (i === next.length - 1) wordIndex = (wordIndex + 1) % words.length;
+        }, stepTime * (current.length + i + 1));
+      });
+
+      setTimeout(() => startBtn?.classList.remove("is-animating"), 600);
+    };
+
+    const pauseDuration = 3600;
+    const typingDuration = 500;
+
+    const runCycle = () => {
+      startBtn?.classList.add("is-progress");
+      setTimeout(() => {
+        startBtn?.classList.remove("is-progress");
+        swapWord();
+        setTimeout(runCycle, typingDuration);
+      }, pauseDuration);
+    };
+
+    runCycle();
+
+    const onPullStart = (e) => {
+      if (window.scrollY > 0) {
+        pulling = false;
         return;
       }
+      pulling = true;
+      pullStartY = e.touches ? e.touches[0].clientY : e.clientY;
+      layout.style.transition = "none";
+    };
 
-      const tg = Telegram.WebApp;
-      tg.ready?.();
-
-      // tg.initData is the signed raw string (what we verify)
-      const initData = tg.initData || "";
-      if (!initData) {
-        setStatus("ERROR: tg.initData is empty. Are you inside Telegram Mini App?", true);
-        return;
+    const onPullMove = (e) => {
+      if (!pulling) return;
+      const y = e.touches ? e.touches[0].clientY : e.clientY;
+      const delta = Math.max(0, y - pullStartY);
+      if (delta > 0) {
+        e.preventDefault();
+        const offset = Math.min(delta * 0.4, 90);
+        layout.style.transform = `translateY(${offset}px)`;
       }
+    };
 
-      setStatus("Sending initData to Worker...");
+    const onPullEnd = () => {
+      if (!pulling) return;
+      layout.style.transition = "transform 0.2s ease";
+      layout.style.transform = "translateY(0)";
+      setTimeout(() => (layout.style.transition = "transform 0.2s ease"), 200);
+      pulling = false;
+    };
 
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ initData })
-        });
+    window.addEventListener("touchstart", onPullStart, { passive: true });
+    window.addEventListener("touchmove", onPullMove, { passive: false });
+    window.addEventListener("touchend", onPullEnd, { passive: true });
 
-        const text = await res.text();
-
-        if (!res.ok) {
-          setStatus(`FAILED (${res.status})`, true);
-          showOutput(text, true);
-          return;
-        }
-
-        setStatus("SUCCESS ✅ Verified by Worker");
-        // Pretty-print JSON if possible
-        try {
-          const json = JSON.parse(text);
-          showOutput(JSON.stringify(json, null, 2));
-        } catch {
-          showOutput(text);
-        }
-      } catch (e) {
-        setStatus("ERROR: Network / CORS / wrong URL", true);
-        showOutput(String(e), true);
+    startBtn?.addEventListener("click", () => {
+      window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("soft");
+      if (window.Telegram?.WebApp?.MainButton) {
+        window.Telegram.WebApp.MainButton.text = "در حال شروع...";
+        window.Telegram.WebApp.MainButton.show();
       }
+      window.Telegram?.WebApp?.expand?.();
     });
+
+    const applyTheme = () => {
+      const params = window.Telegram?.WebApp?.themeParams || {};
+      const normalize = (value) => {
+        if (!value) return null;
+        const v = String(value).trim();
+        return v.startsWith("#") ? v : `#${v}`;
+      };
+      const bg = normalize(params.bg_color) || "#0f172a";
+      root.style.setProperty("--bg", bg);
+      root.style.setProperty("--text", normalize(params.text_color) || "#e9eff8");
+      root.style.setProperty("--muted", normalize(params.hint_color) || "#b7c6dd");
+      root.style.setProperty("--accent", normalize(params.button_color) || "#34bef3");
+      root.style.setProperty("--accent-strong", normalize(params.button_text_color) || "#2bd18c");
+      document
+        .querySelector('meta[name="theme-color"]')
+        .setAttribute("content", getComputedStyle(root).getPropertyValue("--bg").trim());
+    };
+
+    window.Telegram?.WebApp?.onEvent?.("themeChanged", applyTheme);
+    applyTheme();
+    window.Telegram?.WebApp?.setHeaderColor?.("secondary_bg_color");
+    window.Telegram?.WebApp?.ready?.();
   </script>
 </body>
 </html>
