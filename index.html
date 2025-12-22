@@ -528,7 +528,7 @@
         })
         .catch((err) => {
           console.error("API error:", err);
-          const message = err?.message ? `API error: ${err.message}` : "API error";
+          const message = err?.message ? `API error: ${err.message} ${status}` : "API error";
           setResult(message, true);
         });
     });
