@@ -524,11 +524,19 @@
         .then(({ status, data }) => {
           console.log("API data:", data);
           const body = data ? JSON.stringify(data, null, 2) : "[no JSON body]";
-          setResult(`API status: ${status}\n${body}`, status >= 400);
+          const errorText =
+            data && (data.error || data.message)
+              ? String(data.error || data.message)
+              : body;
+          if (status >= 400) {
+            setResult(`API status: ${status} - ${errorText}`, true);
+            return;
+          }
+          setResult(`API status: ${status}\n${body}`, false);
         })
         .catch((err) => {
           console.error("API error:", err);
-          const message = err?.message ? `API error: ${err.message} ${status}` : "API error";
+          const message = err?.message ? `API error: ${err.message}` : "API error";
           setResult(message, true);
         });
     });
