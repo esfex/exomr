@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
@@ -283,6 +283,19 @@
       opacity:0.69;
     }
 
+    .result {
+      margin-top: 6px;
+      text-align: center;
+      color: var(--text);
+      font-size: 0.95rem;
+      min-height: 24px;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .result.is-error {
+      color: #ff9b9b;
+    }
 
     
     @media (prefers-reduced-motion: reduce) {
@@ -321,7 +334,8 @@
         <div class="controls">
 
     </div>
-    
+
+    <div id="result" class="result" aria-live="polite"></div>
 
     </div>
 
@@ -342,6 +356,7 @@
     const startBtn = document.getElementById("start-btn");
     const ctaDynamic = document.getElementById("cta-dynamic");
     const layout = document.querySelector(".layout");
+    const resultBox = document.getElementById("result");
     let index = 0;
     let pullStartY = 0;
     let pulling = false;
@@ -435,6 +450,52 @@
     window.addEventListener("touchmove", onPullMove, { passive: false });
     window.addEventListener("touchend", onPullEnd, { passive: true });
 
+    const setResult = (content, isError = false) => {
+      if (!resultBox) return;
+      resultBox.classList.toggle("is-error", isError);
+      resultBox.textContent = content;
+    };
+
+    const showUser = (user) => {
+      if (!resultBox) return;
+      resultBox.classList.remove("is-error");
+      const lines = [
+        "id: " + (user?.id ?? "-"),
+        "username: " + (user?.username ?? "-"),
+        "first_name: " + (user?.first_name ?? "-"),
+        "last_name: " + (user?.last_name ?? "-"),
+      ];
+      resultBox.textContent = lines.join("\n");
+    };
+
+    const verifyTelegramUser = async () => {
+      const initData = window.Telegram?.WebApp?.initData || "";
+      if (!initData) {
+        setResult("initData not found", true);
+        return;
+      }
+
+      setResult("Verifying...");
+
+      try {
+        const response = await fetch("https://cf-init.esfex.workers.dev/api/auth/telegram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ initData }),
+        });
+
+        const payload = await response.json().catch(() => ({}));
+
+        if (response.ok && payload?.ok && payload?.telegram_user) {
+          showUser(payload.telegram_user);
+        } else {
+          setResult(payload?.error || "Verification failed", true);
+        }
+      } catch (err) {
+        setResult("Network or server error", true);
+      }
+    };
+
     startBtn?.addEventListener("click", () => {
       window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("soft");
       if (window.Telegram?.WebApp?.MainButton) {
@@ -442,6 +503,7 @@
         window.Telegram.WebApp.MainButton.show();
       }
       window.Telegram?.WebApp?.expand?.();
+      verifyTelegramUser();
     });
 
     const applyTheme = () => {
