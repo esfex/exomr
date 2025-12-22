@@ -480,8 +480,8 @@
       try {
         const response = await fetch("https://cf-init.esfex.workers.dev/api/auth/telegram", {
           method: "POST",
-          mode: "cors",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          referrerPolicy: "no-referrer",
           body: JSON.stringify({ initData }),
         });
 
@@ -497,6 +497,7 @@
           setResult(message, true);
         }
       } catch (err) {
+        console.error("Telegram verification fetch error:", err);
         const msg = err && err.message ? `Network error: ${err.message}` : "Network or server error";
         setResult(msg, true);
       }
