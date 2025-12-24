@@ -61,6 +61,7 @@
       will-change: transform;
       position: relative;
       padding-bottom: 110px;
+      align-items: stretch;
     }
 
     .logo-wrap {
@@ -106,15 +107,16 @@
     }
 
     body.form-active .layout {
-      padding-top: 6px;
-      padding-bottom: 28px;
-      gap: 12px;
+      padding-top: 4px;
+      padding-bottom: 20px;
+      gap: 0;
     }
 
     body.form-active .logo-wrap {
       width: 110px;
       height: 110px;
-      transform: translateY(-6px) scale(0.9);
+      transform: translateY(-4px) scale(0.9);
+      margin-bottom: 0;
     }
 
     body.form-active .logo {
@@ -156,6 +158,9 @@
       padding: 0;
       transform: translateY(-10px);
       pointer-events: none;
+      position: absolute;
+      left: 0;
+      right: 0;
     }
 
     .track {
@@ -326,7 +331,12 @@
       opacity:0.69;
     }
 
+    .viewport {
+      order: 1;
+    }
+
     .result {
+      order: 3;
       margin-top: 6px;
       text-align: center;
       color: var(--text);
@@ -354,6 +364,8 @@
       transform: translateY(8px);
       transition: opacity 0.3s ease, max-height 0.4s ease, transform 0.3s ease;
       direction: rtl;
+      order: 2;
+      margin-top: 0;
     }
 
     .form-panel.is-visible {
@@ -373,11 +385,6 @@
     .form-panel.is-visible .field {
       animation: fadeUp 0.35s ease forwards;
       animation-delay: calc(var(--idx, 0) * 80ms);
-    }
-
-    .field label {
-      font-size: 0.92rem;
-      color: var(--muted);
     }
 
     .input-box,
@@ -527,22 +534,18 @@
 
     <div class="form-panel" id="register-panel" aria-label="فرم ثبت نام" role="form">
       <div class="field" style="--idx:0">
-        <label for="first-name">نام</label>
         <input id="first-name" name="first_name" type="text" class="input-box" placeholder="نام" autocomplete="given-name" />
       </div>
       <div class="field" style="--idx:1">
-        <label for="last-name">نام خانوادگی</label>
         <input id="last-name" name="last_name" type="text" class="input-box" placeholder="نام خانوادگی" autocomplete="family-name" />
       </div>
       <div class="field" style="--idx:2">
-        <label for="phone-input">موبایل</label>
         <div class="phone-row">
           <button type="button" class="phone-btn" id="phone-btn" aria-label="دریافت شماره از تلگرام">دریافت</button>
           <input id="phone-input" name="phone" type="tel" class="input-box" placeholder="شماره موبایل از تلگرام" inputmode="tel" readonly />
         </div>
       </div>
       <div class="field" style="--idx:3">
-        <label for="country">کشور سکونت</label>
         <select id="country" name="country" class="select-box">
           <option value="" disabled selected>انتخاب کنید</option>
           <option value="iran">ایران</option>
