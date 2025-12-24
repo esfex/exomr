@@ -491,6 +491,79 @@
       transform: none;
     }
 
+    .link-button {
+      background: none;
+      border: none;
+      color: var(--accent);
+      text-decoration: underline dotted;
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .terms-modal {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 18px;
+      z-index: 20;
+    }
+
+    .terms-modal.is-visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .terms-card {
+      width: min(520px, 100%);
+      background: rgba(12, 24, 48, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      display: grid;
+      gap: 12px;
+    }
+
+    .terms-card header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .terms-close {
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .terms-text {
+      width: 100%;
+      min-height: 180px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      padding: 10px;
+      font-family: "IRYekan", "Tahoma", sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: none;
+      pointer-events: none;
+    }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -564,7 +637,7 @@
       <div class="field checks" style="--idx:4">
         <label class="check">
           <input type="checkbox" id="accept-terms" name="accept_terms" />
-          <span>شرایط و قوانین را می‌پذیرم.</span>
+          <span>شرایط و <button type="button" class="link-button" id="open-terms">قوانین</button> را می‌پذیرم.</span>
         </label>
         <label class="check">
           <input type="checkbox" id="confirm-identity" name="confirm_identity" />
@@ -573,6 +646,119 @@
       </div>
       <div class="field" style="--idx:5">
         <button type="button" class="submit-btn" id="register-submit" disabled>ثبت نام</button>
+      </div>
+    </div>
+
+    <div class="terms-modal" id="terms-modal" role="dialog" aria-modal="true" aria-label="قوانین">
+      <div class="terms-card">
+        <header>
+          <span>شرایط و قوانین استفاده</span>
+          <button type="button" class="terms-close" id="close-terms">بستن</button>
+        </header>
+        <textarea class="terms-text" readonly>
+۱. مقدمه و پذیرش شرایط
+
+با ثبت‌نام، ورود یا استفاده از پلتفرم صرافی اسفندیاری، شما به‌عنوان «کاربر» تأیید می‌کنید که این شرایط و ضوابط را به‌طور کامل مطالعه کرده، درک نموده و بدون هیچ‌گونه قید و شرطی پذیرفته‌اید.
+در صورت عدم موافقت با هر یک از مفاد این سند، استفاده از خدمات پلتفرم مجاز نخواهد بود.
+
+۲. ماهیت و دامنه خدمات پلتفرم
+
+پلتفرم صرافی اسفندیاری یک بستر تخصصی تبادل همتا‌به‌همتا (P2P) برای مبادله ریال عمان (OMR) و تومان ایران (IRT) است.
+
+این پلتفرم صرافی رمزارزی نیست و هیچ‌گونه خدمات مرتبط با ارزهای دیجیتال ارائه نمی‌دهد.
+
+پلتفرم صرفاً نقش واسط امن و امین (Escrow) را در نگهداری موقت ریال عمانی ایفا می‌کند.
+
+کلیه پرداخت‌های مربوط به تومان ایران خارج از پلتفرم و مستقیماً بین حساب‌های بانکی کاربران انجام می‌شود.
+
+۳. سطوح کاربری و احراز هویت
+
+کاربران در پلتفرم در سه سطح تعریف می‌شوند:
+
+سطح ۰: ثبت‌نام‌شده بدون تأیید ایمیل (صرفاً امکان مشاهده)
+
+سطح ۱: ایمیل تأییدشده (بدون دسترسی به معامله یا کیف پول)
+
+سطح ۲: کاربر کاملاً تأییدشده با احراز هویت (دسترسی کامل)
+
+تکمیل فرآیند احراز هویت (KYC) شامل ارائه مدارک معتبر هویتی و اطلاعات بانکی الزامی است.
+
+تأیید یا رد نهایی احراز هویت منحصراً در اختیار مدیریت پلتفرم صرافی اسفندیاری است.
+
+۴. امنیت حساب و مسئولیت‌های کاربر
+
+فعال‌سازی احراز هویت دو مرحله‌ای (2FA) برای ورود و برداشت الزامی است.
+
+کاربر مسئول حفظ امنیت اطلاعات ورود، ایمیل و حساب‌های بانکی معرفی‌شده خود می‌باشد.
+
+هرگونه فعالیت انجام‌شده از طریق حساب کاربری، به‌منزله اقدام آگاهانه و مجاز خود کاربر تلقی می‌گردد.
+
+۵. کیف پول، واریز و برداشت
+
+هر کاربر تأییدشده دارای یک کیف پول داخلی ریال عمان (OMR) است که شامل:
+
+موجودی کل
+
+موجودی قابل استفاده
+
+موجودی مسدودشده در معاملات فعال
+
+واریز OMR تنها از طریق حساب‌های رسمی معرفی‌شده پلتفرم و با بارگذاری رسید معتبر انجام می‌شود و نیازمند بررسی دستی است.
+
+برداشت OMR فقط از موجودی قابل استفاده امکان‌پذیر بوده و پس از کسر کارمزد، به‌صورت دستی پردازش می‌شود.
+
+۶. معاملات و آگهی‌ها
+
+ایجاد آگهی خرید یا فروش OMR فقط برای کاربران سطح ۲ مجاز است.
+
+با شروع هر معامله:
+
+مبلغ OMR مربوطه به‌همراه کارمزد در حالت امانت (Escrow) مسدود می‌شود.
+
+قیمت، کارمزد و شرایط معامله نهایی و غیرقابل تغییر خواهد بود.
+
+هیچ معامله‌ای قابل لغو نیست و هر معامله فقط می‌تواند تکمیل، منقضی یا وارد فرآیند حل اختلاف شود.
+
+۷. کارمزدها
+
+کارمزد معاملات برابر با ۱٪ از ارزش OMR معامله است:
+
+۰٫۵٪ از فروشنده
+
+۰٫۵٪ از خریدار
+
+کارمزد برداشت طبق تعرفه اعلام‌شده توسط پلتفرم محاسبه می‌شود.
+
+کلیه کارمزدها پیش از تأیید نهایی، به‌صورت شفاف به کاربر نمایش داده می‌شوند.
+
+پلتفرم صرافی اسفندیاری این حق را برای خود محفوظ می‌دارد که در صورت تغییر شرایط عملیاتی، بازار، هزینه‌ها یا الزامات قانونی، درصد و ساختار کارمزدها را در آینده اصلاح یا به‌روزرسانی نماید. هرگونه تغییر در کارمزدها پیش از اعمال، از طریق پلتفرم به کاربران اطلاع‌رسانی خواهد شد و ادامه استفاده از خدمات به‌منزله پذیرش شرایط جدید خواهد بود.
+
+۸. حل اختلاف و داوری
+
+در صورت بروز اختلاف، سیستم به‌صورت خودکار درخواست پشتیبانی ایجاد می‌کند.
+
+هر دو طرف معامله موظف به ارائه مستندات معتبر هستند.
+
+تصمیم مدیریت پلتفرم صرافی اسفندیاری قطعی، نهایی و لازم‌الاجرا است.
+
+۹. تعلیق، مسدودسازی و خاتمه حساب
+
+پلتفرم حق دارد در صورت نقض قوانین، ارائه اطلاعات نادرست، تقلب یا سوءاستفاده، حساب کاربر را به‌صورت موقت یا دائم مسدود نماید.
+
+در مدت بررسی، وجوه مرتبط ممکن است مسدود باقی بمانند تا تعیین تکلیف نهایی انجام شود.
+
+۱۰. محدودیت مسئولیت
+
+پلتفرم صرافی اسفندیاری مسئول نوسانات نرخ ارز، تأخیرهای بانکی یا مشکلات پرداخت خارج از پلتفرم نیست.
+
+صحت و انجام پرداخت‌های تومانی بر عهده کاربران طرف معامله می‌باشد.
+
+مسئولیت پلتفرم صرفاً در چارچوب قوانین و فرآیندهای داخلی آن تعریف می‌شود.
+
+۱۱. تغییر شرایط
+
+پلتفرم صرافی اسفندیاری حق دارد در هر زمان این شرایط و ضوابط را اصلاح یا به‌روزرسانی کند.
+ادامه استفاده از خدمات به‌منزله پذیرش نسخه جدید خواهد بود.        </textarea>
       </div>
     </div>
 
@@ -602,6 +788,9 @@
     const registerSubmit = document.getElementById("register-submit");
     const acceptTerms = document.getElementById("accept-terms");
     const confirmIdentity = document.getElementById("confirm-identity");
+    const openTermsBtn = document.getElementById("open-terms");
+    const termsModal = document.getElementById("terms-modal");
+    const closeTermsBtn = document.getElementById("close-terms");
     let index = 0;
     let pullStartY = 0;
     let pulling = false;
@@ -861,6 +1050,20 @@
     confirmIdentity?.addEventListener("change", updateSubmitState);
     updateSubmitState();
 
+    const openTerms = () => {
+      termsModal?.classList.add("is-visible");
+    };
+
+    const closeTerms = () => {
+      termsModal?.classList.remove("is-visible");
+    };
+
+    openTermsBtn?.addEventListener("click", openTerms);
+    closeTermsBtn?.addEventListener("click", closeTerms);
+    termsModal?.addEventListener("click", (e) => {
+      if (e.target === termsModal) closeTerms();
+    });
+
     const applyTheme = () => {
       const params = window.Telegram?.WebApp?.themeParams || {};
       const normalize = (value) => {
@@ -886,4 +1089,5 @@
   </script>
 </body>
 </html>
+
 
