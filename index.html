@@ -767,11 +767,11 @@
       window.Telegram?.WebApp?.MainButton?.hide();
       window.Telegram?.WebApp?.expand?.();
       startBtn?.classList.add("is-disappearing");
+      document.querySelector(".viewport")?.classList.add("is-hidden");
       setTimeout(() => startBtn?.remove(), 500);
       logo?.classList.add("is-zooming");
       setTimeout(() => {
         document.body.classList.add("form-active");
-        document.querySelector(".viewport")?.classList.add("is-hidden");
         setTimeout(() => formPanel?.classList.add("is-visible"), 140);
       }, 480);
       setResult("");
