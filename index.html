@@ -554,7 +554,7 @@
       font: inherit;
     }
 
-    .terms-text {
+        .terms-text {
       width: 100%;
       min-height: 360px;
       border-radius: 10px;
@@ -566,7 +566,9 @@
       font-size: 0.95rem;
       line-height: 1.6;
       resize: none;
-      pointer-events: none;
+      pointer-events: auto;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     @keyframes fadeUp {
@@ -1094,5 +1096,6 @@
   </script>
 </body>
 </html>
+
 
 
