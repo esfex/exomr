@@ -786,10 +786,70 @@
       }
     });
 
-    registerSubmit?.addEventListener("click", () => {
-      window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
-      setResult("ثبت‌نام: بعداً به سرور ارسال می‌شود.");
-    });
+    const submitRegistration = async () => {
+      const firstName = document.getElementById("first-name")?.value?.trim() || "";
+      const lastName = document.getElementById("last-name")?.value?.trim() || "";
+      const phone = phoneInput?.value?.trim() || "";
+      const country = document.getElementById("country")?.value || "";
+      if (!firstName || !lastName || !phone || !country || !acceptTerms?.checked || !confirmIdentity?.checked) {
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+        setResult("لطفاً همه فیلدها را تکمیل و تیک‌ها را فعال کنید.", true);
+        return;
+      }
+
+      const initData = window.Telegram?.WebApp?.initData || "";
+      if (!initData) {
+        setResult("initData یافت نشد. لطفاً از داخل تلگرام باز کنید.", true);
+        return;
+      }
+
+      const payload = {
+        initData,
+        first_name: firstName,
+        last_name: lastName,
+        phone,
+        country,
+        accept_terms: !!acceptTerms?.checked,
+        confirm_identity: !!confirmIdentity?.checked,
+      };
+
+      const originalText = registerSubmit?.textContent;
+      registerSubmit.disabled = true;
+      registerSubmit.textContent = "در حال ارسال...";
+      setResult("در حال ثبت نام...");
+
+      try {
+        const res = await fetch("https://cf-init.esfex.workers.dev/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const raw = await res.text();
+        let data;
+        try { data = JSON.parse(raw); } catch { data = raw; }
+
+        if (!res.ok) {
+          const msg = typeof data === "string" ? data : data?.error || data?.message || `خطا (${res.status})`;
+          setResult(msg, true);
+          window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+          return;
+        }
+
+        setResult(typeof data === "string" ? data : JSON.stringify(data, null, 2));
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
+      } catch (err) {
+        console.error("Register error:", err);
+        const msg = err?.message ? `خطای شبکه: ${err.message}` : "خطای شبکه";
+        setResult(msg, true);
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+      } finally {
+        registerSubmit.disabled = false;
+        if (originalText) registerSubmit.textContent = originalText;
+      }
+    };
+
+    registerSubmit?.addEventListener("click", submitRegistration);
 
     const updateSubmitState = () => {
       const enabled = acceptTerms?.checked && confirmIdentity?.checked;
