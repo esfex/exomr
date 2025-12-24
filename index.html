@@ -87,10 +87,6 @@
       animation: floaty 12s ease-in-out infinite alternate;
     }
 
-    .logo.is-zooming {
-      transition: transform 0.7s ease, box-shadow 0.6s ease;
-    }
-
     .logo::before {
       content: "";
       position: absolute;
@@ -222,13 +218,10 @@
       overflow: hidden;
     }
 
-    .cta.is-hidden,
-    .cta.is-disappearing {
+    .cta.is-hidden {
       opacity: 0;
-      transform: translateY(-4px);
-      box-shadow: none;
+      transform: translateY(-6px);
       pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
     }
 
     .cta:active {
@@ -310,8 +303,6 @@
     @keyframes spin-border {
       to { transform: rotate(360deg); }
     }
-
-    @keyframes logoShift {}
 
     .dot {
       width: 7px;
@@ -603,7 +594,6 @@
     const dots = Array.from(document.querySelectorAll(".dot"));
     const startBtn = document.getElementById("start-btn");
     const ctaDynamic = document.getElementById("cta-dynamic");
-    const logo = document.querySelector(".logo");
     const layout = document.querySelector(".layout");
     const resultBox = document.getElementById("result");
     const formPanel = document.getElementById("register-panel");
@@ -766,14 +756,10 @@
       window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("soft");
       window.Telegram?.WebApp?.MainButton?.hide();
       window.Telegram?.WebApp?.expand?.();
-      startBtn?.classList.add("is-disappearing");
+      document.body.classList.add("form-active");
       document.querySelector(".viewport")?.classList.add("is-hidden");
-      setTimeout(() => startBtn?.remove(), 500);
-      logo?.classList.add("is-zooming");
-      setTimeout(() => {
-        document.body.classList.add("form-active");
-        setTimeout(() => formPanel?.classList.add("is-visible"), 140);
-      }, 480);
+      startBtn?.remove();
+      setTimeout(() => formPanel?.classList.add("is-visible"), 60);
       setResult("");
     };
 
