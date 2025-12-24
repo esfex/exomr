@@ -88,12 +88,7 @@
     }
 
     .logo.is-zooming {
-      animation: logoShift 1s ease-in-out forwards;
-    }
-
-    .logo.is-zooming::before {
-      filter: blur(20px);
-      opacity: 0.9;
+      transition: transform 0.7s ease, box-shadow 0.6s ease;
     }
 
     .logo::before {
@@ -227,18 +222,13 @@
       overflow: hidden;
     }
 
-    .cta.is-hidden {
-      opacity: 0;
-      transform: translateY(-6px);
-      pointer-events: none;
-    }
-
+    .cta.is-hidden,
     .cta.is-disappearing {
-      transform: scale(0.1) translateY(-8px);
       opacity: 0;
+      transform: translateY(-4px);
       box-shadow: none;
       pointer-events: none;
-      transition: transform 1s ease, opacity 1s ease, box-shadow 0.2s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
     }
 
     .cta:active {
@@ -321,12 +311,7 @@
       to { transform: rotate(360deg); }
     }
 
-    @keyframes logoShift {
-      0% { transform: scale(1) translateY(0); box-shadow: 0 16px 36px rgba(52, 189, 243, 0.24); }
-      35% { transform: scale(1.18) translateY(4px); box-shadow: 0 22px 44px rgba(0, 8, 151, 0.26); }
-      70% { transform: scale(0.95) translateY(-6px); box-shadow: 0 16px 30px rgba(45, 209, 162, 0.28); }
-      100% { transform: scale(0.9) translateY(-8px); box-shadow: 0 10px 22px rgba(52, 189, 243, 0.18); }
-    }
+    @keyframes logoShift {}
 
     .dot {
       width: 7px;
@@ -782,14 +767,13 @@
       window.Telegram?.WebApp?.MainButton?.hide();
       window.Telegram?.WebApp?.expand?.();
       startBtn?.classList.add("is-disappearing");
-      setTimeout(() => startBtn?.remove(), 1000);
+      setTimeout(() => startBtn?.remove(), 500);
       logo?.classList.add("is-zooming");
-      setTimeout(() => logo?.classList.remove("is-zooming"), 1300);
       setTimeout(() => {
         document.body.classList.add("form-active");
         document.querySelector(".viewport")?.classList.add("is-hidden");
         setTimeout(() => formPanel?.classList.add("is-visible"), 140);
-      }, 980);
+      }, 480);
       setResult("");
     };
 
