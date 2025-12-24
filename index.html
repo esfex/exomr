@@ -71,6 +71,7 @@
       margin: 4px 0 6px;
       position: relative;
       overflow: visible;
+      transition: transform 0.35s ease, width 0.35s ease, height 0.35s ease;
     }
 
     .logo {
@@ -100,6 +101,27 @@
       pointer-events: none;
     }
 
+    body.form-active {
+      align-items: flex-start;
+    }
+
+    body.form-active .layout {
+      padding-top: 10px;
+      gap: 18px;
+    }
+
+    body.form-active .logo-wrap {
+      width: 110px;
+      height: 110px;
+      transform: translateY(-6px) scale(0.9);
+    }
+
+    body.form-active .logo {
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 10px 22px rgba(52, 189, 243, 0.18);
+    }
+
     .logo img {
       position: relative;
       z-index: 2;
@@ -118,7 +140,18 @@
       border-radius: 18px;
       background: transparent;
       border: none;
+      transition: opacity 0.35s ease, max-height 0.35s ease, transform 0.35s ease;
+      max-height: 820px;
+      opacity: 1;
+      will-change: transform, opacity, max-height;
       touch-action: pan-y;
+    }
+
+    .viewport.is-hidden {
+      opacity: 0;
+      max-height: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
     }
 
     .track {
@@ -175,6 +208,12 @@
       width: fit-content;
       position: relative;
       overflow: hidden;
+    }
+
+    .cta.is-hidden {
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
     }
 
     .cta:active {
@@ -297,6 +336,151 @@
       color: #ff9b9b;
     }
 
+    .form-panel {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 14px 14px 16px;
+      display: grid;
+      gap: 12px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, max-height 0.4s ease, transform 0.3s ease;
+      direction: rtl;
+    }
+
+    .form-panel.is-visible {
+      opacity: 1;
+      max-height: 1100px;
+      transform: translateY(0);
+      overflow: visible;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .form-panel.is-visible .field {
+      animation: fadeUp 0.35s ease forwards;
+      animation-delay: calc(var(--idx, 0) * 80ms);
+    }
+
+    .field label {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .input-box,
+    .select-box {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(12, 24, 48, 0.6);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-box:focus,
+    .select-box:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(60, 183, 255, 0.18);
+    }
+
+    .phone-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .phone-btn {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: linear-gradient(135deg, rgba(60, 183, 255, 0.16), rgba(45, 209, 162, 0.16));
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .phone-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    .phone-btn[disabled] {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .checks {
+      display: grid;
+      gap: 10px;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .check:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .check input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #0c1729;
+      font-weight: 700;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(42, 211, 139, 0.22);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .submit-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 10px 20px rgba(42, 211, 139, 0.2);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     
     @media (prefers-reduced-motion: reduce) {
       .track, .dot, .cta { transition: none; }
@@ -337,6 +521,50 @@
 
     <div id="result" class="result" aria-live="polite"></div>
 
+    <div class="form-panel" id="register-panel" aria-label="فرم ثبت نام" role="form">
+      <div class="field" style="--idx:0">
+        <label for="first-name">نام</label>
+        <input id="first-name" name="first_name" type="text" class="input-box" placeholder="نام" autocomplete="given-name" />
+      </div>
+      <div class="field" style="--idx:1">
+        <label for="last-name">نام خانوادگی</label>
+        <input id="last-name" name="last_name" type="text" class="input-box" placeholder="نام خانوادگی" autocomplete="family-name" />
+      </div>
+      <div class="field" style="--idx:2">
+        <label for="phone-input">موبایل</label>
+        <div class="phone-row">
+          <button type="button" class="phone-btn" id="phone-btn" aria-label="دریافت شماره از تلگرام">دریافت</button>
+          <input id="phone-input" name="phone" type="tel" class="input-box" placeholder="شماره موبایل از تلگرام" inputmode="tel" readonly />
+        </div>
+      </div>
+      <div class="field" style="--idx:3">
+        <label for="country">کشور سکونت</label>
+        <select id="country" name="country" class="select-box">
+          <option value="" disabled selected>انتخاب کنید</option>
+          <option value="iran">ایران</option>
+          <option value="oman">عمان</option>
+          <option value="uae">امارات متحده عربی</option>
+          <option value="bahrain">بحرین</option>
+          <option value="kuwait">کویت</option>
+          <option value="qatar">قطر</option>
+          <option value="saudi_arabia">عربستان سعودی</option>
+        </select>
+      </div>
+      <div class="field checks" style="--idx:4">
+        <label class="check">
+          <input type="checkbox" id="accept-terms" name="accept_terms" />
+          <span>شرایط و قوانین را می‌پذیرم.</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" id="confirm-identity" name="confirm_identity" />
+          <span>اطلاعات وارد شده مطابق با مدارک هویتی من است.</span>
+        </label>
+      </div>
+      <div class="field" style="--idx:5">
+        <button type="button" class="submit-btn" id="register-submit">ثبت نام</button>
+      </div>
+    </div>
+
     </div>
 
     
@@ -357,10 +585,15 @@
     const ctaDynamic = document.getElementById("cta-dynamic");
     const layout = document.querySelector(".layout");
     const resultBox = document.getElementById("result");
+    const formPanel = document.getElementById("register-panel");
+    const phoneBtn = document.getElementById("phone-btn");
+    const phoneInput = document.getElementById("phone-input");
+    const registerSubmit = document.getElementById("register-submit");
     let index = 0;
     let pullStartY = 0;
     let pulling = false;
     let autoplay;
+    let formMode = false;
 
     console.log("UI loaded");
     const setIndex = (i) => {
@@ -504,41 +737,46 @@
       }
     };
 
-    startBtn?.addEventListener("click", () => {
+    const enterFormMode = () => {
+      if (formMode) return;
+      formMode = true;
+      clearInterval(autoplay);
       window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("soft");
-      if (window.Telegram?.WebApp?.MainButton) {
-        window.Telegram.WebApp.MainButton.text = "در حال شروع...";
-        window.Telegram.WebApp.MainButton.show();
-      }
+      window.Telegram?.WebApp?.MainButton?.hide();
       window.Telegram?.WebApp?.expand?.();
-      setResult("Testing API...");
+      document.body.classList.add("form-active");
+      document.querySelector(".viewport")?.classList.add("is-hidden");
+      startBtn?.classList.add("is-hidden");
+      setTimeout(() => formPanel?.classList.add("is-visible"), 60);
+      setResult("");
+    };
 
-      fetch("https://cf-init.esfex.workers.dev/api/me?telegram_user_id=123")
-        .then((res) => {
-          console.log("API status:", res.status);
-          return res
-            .json()
-            .then((data) => ({ status: res.status, data }))
-            .catch(() => ({ status: res.status, data: null }));
-        })
-        .then(({ status, data }) => {
-          console.log("API data:", data);
-          const body = data ? JSON.stringify(data, null, 2) : "[no JSON body]";
-          const errorText =
-            data && (data.error || data.message)
-              ? String(data.error || data.message)
-              : body;
-          if (status >= 400) {
-            setResult(`API status: ${status} - ${errorText}`, true);
-            return;
-          }
-          setResult(`API status: ${status}\n${body}`, false);
-        })
-        .catch((err) => {
-          console.error("API error:", err);
-          const message = err?.message ? `API error: ${err.message}` : "API error";
-          setResult(message, true);
-        });
+    startBtn?.addEventListener("click", enterFormMode);
+
+    phoneBtn?.addEventListener("click", async () => {
+      if (phoneBtn.disabled) return;
+      try {
+        phoneBtn.disabled = true;
+        phoneBtn.textContent = "?? ??? ???????...";
+        const response = await window.Telegram?.WebApp?.requestPhoneNumber?.();
+        if (response?.phone_number) {
+          phoneInput.value = response.phone_number;
+          setResult("????? ?????? ?? ?????? ?????? ??");
+        } else {
+          setResult("????? ?????? ???", true);
+        }
+      } catch (err) {
+        console.error("Phone request error:", err);
+        setResult("???? ????? ?????? ???? ???", true);
+      } finally {
+        phoneBtn.textContent = "??????";
+        phoneBtn.disabled = false;
+      }
+    });
+
+    registerSubmit?.addEventListener("click", () => {
+      window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
+      setResult("???????: ????? ?? ???? ????? ??????.");
     });
 
     const applyTheme = () => {
@@ -566,3 +804,4 @@
   </script>
 </body>
 </html>
+
