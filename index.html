@@ -349,7 +349,7 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 16px;
-      padding: 14px 14px 16px;
+      padding: 0 14px 16px;
       display: grid;
       gap: 12px;
       opacity: 0;
@@ -480,6 +480,13 @@
       box-shadow: 0 10px 20px rgba(42, 211, 139, 0.2);
     }
 
+    .submit-btn[disabled] {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -561,7 +568,7 @@
         </label>
       </div>
       <div class="field" style="--idx:5">
-        <button type="button" class="submit-btn" id="register-submit">ثبت نام</button>
+        <button type="button" class="submit-btn" id="register-submit" disabled>ثبت نام</button>
       </div>
     </div>
 
@@ -589,6 +596,8 @@
     const phoneBtn = document.getElementById("phone-btn");
     const phoneInput = document.getElementById("phone-input");
     const registerSubmit = document.getElementById("register-submit");
+    const acceptTerms = document.getElementById("accept-terms");
+    const confirmIdentity = document.getElementById("confirm-identity");
     let index = 0;
     let pullStartY = 0;
     let pulling = false;
