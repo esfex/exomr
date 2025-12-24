@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
@@ -745,7 +745,6 @@
         setResult(msg, true);
       }
     };
-
     const enterFormMode = () => {
       if (formMode) return;
       formMode = true;
@@ -755,7 +754,7 @@
       window.Telegram?.WebApp?.expand?.();
       document.body.classList.add("form-active");
       document.querySelector(".viewport")?.classList.add("is-hidden");
-      startBtn?.classList.add("is-hidden");
+      startBtn?.remove();
       setTimeout(() => formPanel?.classList.add("is-visible"), 60);
       setResult("");
     };
@@ -766,27 +765,37 @@
       if (phoneBtn.disabled) return;
       try {
         phoneBtn.disabled = true;
-        phoneBtn.textContent = "?? ??? ???????...";
+        phoneBtn.textContent = "در حال درخواست...";
         const response = await window.Telegram?.WebApp?.requestPhoneNumber?.();
         if (response?.phone_number) {
           phoneInput.value = response.phone_number;
-          setResult("????? ?????? ?? ?????? ?????? ??");
+          setResult("شماره موبایل از تلگرام دریافت شد");
         } else {
-          setResult("????? ?????? ???", true);
+          setResult("شماره دریافت نشد", true);
         }
       } catch (err) {
         console.error("Phone request error:", err);
-        setResult("???? ????? ?????? ???? ???", true);
+        setResult("مجوز شماره موبایل داده نشد", true);
       } finally {
-        phoneBtn.textContent = "??????";
+        phoneBtn.textContent = "دریافت";
         phoneBtn.disabled = false;
       }
     });
 
     registerSubmit?.addEventListener("click", () => {
       window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
-      setResult("???????: ????? ?? ???? ????? ??????.");
+      setResult("ثبت‌نام: بعداً به سرور ارسال می‌شود.");
     });
+
+    const updateSubmitState = () => {
+      const enabled = acceptTerms?.checked && confirmIdentity?.checked;
+      if (!registerSubmit) return;
+      registerSubmit.disabled = !enabled;
+    };
+
+    acceptTerms?.addEventListener("change", updateSubmitState);
+    confirmIdentity?.addEventListener("change", updateSubmitState);
+    updateSubmitState();
 
     const applyTheme = () => {
       const params = window.Telegram?.WebApp?.themeParams || {};
