@@ -88,7 +88,7 @@
     }
 
     .logo.is-zooming {
-      animation: spookyZoom 0.6s ease forwards;
+      animation: spookyZoom 0.9s ease forwards;
     }
 
     .logo.is-zooming::before {
@@ -315,8 +315,9 @@
 
     @keyframes spookyZoom {
       0% { transform: scale(1) rotate(0deg); box-shadow: 0 16px 36px rgba(52, 189, 243, 0.24); }
-      30% { transform: scale(1.25) rotate(-2deg); box-shadow: 0 24px 48px rgba(0, 8, 151, 0.28); }
-      60% { transform: scale(1.32) rotate(1deg); box-shadow: 0 26px 52px rgba(45, 209, 162, 0.32); }
+      30% { transform: scale(1.28) rotate(-2deg); box-shadow: 0 24px 48px rgba(0, 8, 151, 0.28); }
+      55% { transform: scale(1.42) rotate(2deg); box-shadow: 0 30px 56px rgba(45, 209, 162, 0.34); }
+      80% { transform: scale(1.32) rotate(-1deg); box-shadow: 0 22px 48px rgba(52, 189, 243, 0.3); }
       100% { transform: scale(0.92) rotate(0deg); box-shadow: 0 10px 22px rgba(52, 189, 243, 0.18); }
     }
 
@@ -775,12 +776,12 @@
       window.Telegram?.WebApp?.expand?.();
       startBtn?.remove();
       logo?.classList.add("is-zooming");
-      setTimeout(() => logo?.classList.remove("is-zooming"), 800);
+      setTimeout(() => logo?.classList.remove("is-zooming"), 1100);
       setTimeout(() => {
         document.body.classList.add("form-active");
         document.querySelector(".viewport")?.classList.add("is-hidden");
-        setTimeout(() => formPanel?.classList.add("is-visible"), 80);
-      }, 620);
+        setTimeout(() => formPanel?.classList.add("is-visible"), 120);
+      }, 780);
       setResult("");
     };
 
