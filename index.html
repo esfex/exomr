@@ -499,6 +499,9 @@
       font: inherit;
       cursor: pointer;
       padding: 0;
+      text-decoration-line: underline;
+  text-decoration-style: dotted;
+
     }
 
     .terms-modal {
@@ -520,7 +523,7 @@
     }
 
     .terms-card {
-      width: min(520px, 100%);
+      width: min(620px, 100%);
       background: rgba(12, 24, 48, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
@@ -551,7 +554,7 @@
 
     .terms-text {
       width: 100%;
-      min-height: 180px;
+      min-height: 320px;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.03);
@@ -561,7 +564,8 @@
       font-size: 0.95rem;
       line-height: 1.6;
       resize: none;
-      pointer-events: none;
+      pointer-events: auto;
+      overflow: auto;
     }
 
     @keyframes fadeUp {
