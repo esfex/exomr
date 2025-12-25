@@ -646,7 +646,7 @@
     <section class="viewport" aria-label="ویژگی‌ها" role="group">
       <div class="track" data-track>
         <article class="slide" aria-label="تبدیل سریع">
-          <h2>تبدیل فوری</h2>
+          <h2>تبدیل فوری - ورژن 1</h2>
           <p>خرید و فروش در بستری امن با فرآیند ساده، پشتیبانی ۲۴ ساعته و تسویه مطمئن</p>
         </article>
         <article class="slide" aria-label="کیف پول">
@@ -1143,7 +1143,7 @@ phoneBtn?.addEventListener("click", async () => {
       const phone = await fetchPhoneFromBackend();
       if (phone) {
         phoneInput.value = phone;
-        setResult("شماره موبایل با موفقیت دریافت شد - ورژن 1");
+        setResult("شماره موبایل با موفقیت دریافت شد");
         return;
       }
       await new Promise(r => setTimeout(r, 1000));
