@@ -841,7 +841,7 @@
 <div class="note">
   © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳
   <br />
-  1.1
+  v1.2
 
 
     </div>
@@ -917,6 +917,9 @@
           return;
         }
         showApp();
+        const data = await res.json();
+        window.__SESSION_TOKEN__ = data.session_token;
+
       } catch (err) {
         console.error("Gate check error:", err);
         showGate("بررسی دسترسی ناموفق بود. لطفاً از داخل تلگرام دوباره تلاش کنید.");
@@ -1192,14 +1195,15 @@ phoneBtn?.addEventListener("click", async () => {
       }
 
       const payload = {
-        initData,
-        first_name: firstName,
-        last_name: lastName,
+        session_token: window.__SESSION_TOKEN__,
+        first_name,
+        last_name,
         phone,
         country,
-        accept_terms: !!acceptTerms?.checked,
-        confirm_identity: !!confirmIdentity?.checked,
+        accept_terms,
+        confirm_identity,
       };
+
 
       const originalText = registerSubmit?.textContent;
       registerSubmit.disabled = true;
