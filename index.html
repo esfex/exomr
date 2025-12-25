@@ -847,6 +847,16 @@
     </div>
 
   <script>
+
+    window.onerror = function (message, source, lineno, colno, error) {
+      const msg = `JS Error: ${message} @${lineno}:${colno}`;
+      const box = document.getElementById("result");
+      if (box) {
+        box.classList.add("is-error");
+        box.textContent = msg;
+      }
+    };
+
     function newReqId() {
       return "req_" + Math.random().toString(36).slice(2, 10);
     }
@@ -1195,12 +1205,6 @@ phoneBtn?.addEventListener("click", async () => {
       if (!validatePhone(phone)) {
         window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
         setResult("شماره موبایل معتبر نیست.", true);
-        return;
-      }
-
-      const initData = window.Telegram?.WebApp?.initData || "";
-      if (!initData) {
-        setResult("initData یافت نشد. لطفاً از داخل تلگرام باز کنید.", true);
         return;
       }
 
