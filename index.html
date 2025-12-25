@@ -1143,7 +1143,7 @@ phoneBtn?.addEventListener("click", async () => {
       const phone = await fetchPhoneFromBackend();
       if (phone) {
         phoneInput.value = phone;
-        setResult("شماره موبایل با موفقیت دریافت شد");
+        setResult("شماره موبایل با موفقیت دریافت شد - ورژن 1");
         return;
       }
       await new Promise(r => setTimeout(r, 1000));
