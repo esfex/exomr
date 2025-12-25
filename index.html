@@ -871,6 +871,8 @@
     let autoplay;
     let formMode = false;
     let isAuthorized = false;
+    let contactSent = false;
+
 
     console.log("UI loaded");
     document.addEventListener("DOMContentLoaded", () => {
@@ -1085,7 +1087,7 @@
       return /^[+]?\\d{8,15}$/.test(v);
     };
 
-    async function fetchPhoneFromBackend() {
+async function fetchPhoneFromBackend() {
   const initData = window.Telegram?.WebApp?.initData;
   if (!initData) return null;
 
@@ -1101,8 +1103,15 @@
   return data?.phone || null;
 }
 
-    phoneBtn?.addEventListener("click", async () => {
+
+phoneBtn?.addEventListener("click", async () => {
   if (phoneBtn.disabled) return;
+
+  // 🔒 Prevent re-request after success
+  if (contactSent) {
+    setResult("شماره قبلاً ارسال شده است.");
+    return;
+  }
 
   try {
     phoneBtn.disabled = true;
@@ -1113,7 +1122,7 @@
       return;
     }
 
-    // ✅ Modern, correct API usage
+    // ✅ Official, modern Telegram API
     const res = await window.Telegram.WebApp.requestContact();
 
     // ❌ Only explicit cancel is failure
@@ -1122,29 +1131,33 @@
       return;
     }
 
-    // ✅ Success path
+    // ✅ Telegram CONFIRMED → lock forever
+    contactSent = true;
+
     setResult("شماره ارسال شد. در حال دریافت از سرور...");
 
-    // ⏳ Poll backend (max 10s)
+    // ⏳ Poll backend (eventual consistency)
     const start = Date.now();
-const timeout = 10000;
+    const timeout = 10000;
 
-while (Date.now() - start < timeout) {
-  const phone = await fetchPhoneFromBackend();
-  if (phone) {
-    phoneInput.value = phone;
-    setResult("شماره موبایل با موفقیت دریافت شد");
-    return;
-  }
-  await new Promise(r => setTimeout(r, 1000));
-}
+    while (Date.now() - start < timeout) {
+      const phone = await fetchPhoneFromBackend();
 
-setResult("دریافت شماره بیش از حد طول کشید. لطفاً دوباره تلاش کنید.", true);
+      if (phone) {
+        phoneInput.value = phone;
+        setResult("شماره موبایل با موفقیت دریافت شد");
+        return;
+      }
 
+      await new Promise(r => setTimeout(r, 1000));
+    }
+
+    // ⚠️ Not an error — backend may sync later
+    setResult("شماره ارسال شده و در حال همگام‌سازی با سرور است.");
 
   } catch (err) {
     console.error("requestContact error:", err);
-    setResult("درخواست ارسال شماره لغو شد.", true);
+    setResult("خطا در ارتباط با تلگرام", true);
   } finally {
     phoneBtn.textContent = "دریافت";
     phoneBtn.disabled = false;
