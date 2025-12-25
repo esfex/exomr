@@ -1138,7 +1138,7 @@
           setTimeout(() => resolve({ error: "timeout" }), 8000);
         });
 
-        if (response?.status === "sent") {
+        if (response?.status === "sent" || response?.ok === true) {
           setResult("شماره با موفقیت ارسال شد. در حال دریافت...");
           await fetchPhoneFromBackend();
         } else {
