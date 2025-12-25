@@ -1281,7 +1281,14 @@ phoneBtn?.addEventListener("click", async () => {
     window.Telegram?.WebApp?.onEvent?.("themeChanged", applyTheme);
     applyTheme();
     window.Telegram?.WebApp?.setHeaderColor?.("secondary_bg_color");
-    window.Telegram?.WebApp?.ready?.();
+    if (window.Telegram?.WebApp) {
+  Telegram.WebApp.setupSwipeBehavior({
+    vertical: false,
+  });
+
+  Telegram.WebApp.ready();
+}
+
   </script>
 </body>
 </html>
