@@ -24,7 +24,7 @@
 
     :root {
       --bg: #0A1F8F;
-      --text: #8EDBFF;
+      --text: #ffffff;
       --muted: rgba(142, 219, 255, 0.78);
       --accent: #3FD0FF;
       --accent-strong: #0B4DB8;
@@ -44,9 +44,10 @@
       margin: 0;
       min-height: 100vh;
       font-family: "IRYekan", "Tahoma", sans-serif;
-      background: linear-gradient(145deg, rgba(11, 77, 184, 0.28), rgba(63, 208, 255, 0.18)),
-        radial-gradient(120% 80% at 20% 10%, rgba(142, 219, 255, 0.12), transparent),
-        var(--bg);
+      background: linear-gradient(135deg,
+        #0B1020 0%,
+        #0A1F8F 60%,
+        #0B4DB8 100%);
       color: var(--text);
       padding: calc(18px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
       display: flex;
@@ -1267,7 +1268,7 @@ phoneBtn?.addEventListener("click", async () => {
     const applyTheme = () => {
       const brand = {
         bg: "#0A1F8F",
-        text: "#8EDBFF",
+        text: "#ffffff",
         muted: "rgba(142, 219, 255, 0.78)",
         accent: "#3FD0FF",
         accentStrong: "#0B4DB8",
