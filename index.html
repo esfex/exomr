@@ -582,13 +582,17 @@
 
     .gate-card {
       width: 100%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
+      background:none;
+      border: none;
+
       padding: 16px 18px;
       display: grid;
       gap: 10px;
       text-align: center;
+    }
+
+    .gate-message{
+    font-size: 0.88rem;
     }
 
     .gate-link {
@@ -810,8 +814,8 @@
       </div>
     </div>
     <div class="gate-card">
-      <h2 style="margin:0 0 6px;text-align:center;">دسترسی فقط از تلگرام</h2>
-      <p id="gate-message" style="margin:0 0 12px;color:var(--muted);text-align:center;">برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.</p>
+      <h3 style="margin:0 0 6px;text-align:center;">صرافی اسفندیاری</h3>
+      <p id="gate-message" class="gate-message" style="margin:0 0 12px;color:var(--muted);text-align:center;">برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.</p>
       <a class="gate-link" href="#" role="link">باز کردن ربات در تلگرام</a>
     </div>
   </div>
