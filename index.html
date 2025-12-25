@@ -1215,7 +1215,11 @@ phoneBtn?.addEventListener("click", async () => {
         try { data = JSON.parse(raw); } catch { data = raw; }
 
         if (!res.ok) {
-          const msg = typeof data === "string" ? data : data?.error || data?.message || `خطا (${res.status})`;
+          const msg =
+  typeof data === "string"
+    ? data
+    : data?.detail || data?.error || data?.message || `خطا (${res.status})`;
+
           setResult(msg, true);
           window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
           return;
