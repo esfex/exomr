@@ -1206,14 +1206,13 @@ phoneBtn?.addEventListener("click", async () => {
 
       const payload = {
         session_token: window.__SESSION_TOKEN__,
-        first_name,
-        last_name,
-        phone,
-        country,
-        accept_terms,
-        confirm_identity,
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        country: country,
+        accept_terms: acceptTerms.checked,
+        confirm_identity: confirmIdentity.checked,
       };
-
 
       const originalText = registerSubmit?.textContent;
       registerSubmit.disabled = true;
@@ -1223,7 +1222,6 @@ phoneBtn?.addEventListener("click", async () => {
       try {
         const controller = new AbortController();
         const t = setTimeout(() => controller.abort(), 12000); // 12s timeout (Telegram-safe)
-        const reqId = "req_" + Math.random().toString(36).slice(2, 10);
         setResult(`🧭 register start (${reqId})`);
 
         const res = await fetch("https://cf-init.esfex.workers.dev/api/register", {
