@@ -1164,6 +1164,7 @@ phoneBtn?.addEventListener("click", async () => {
 });
 
     const submitRegistration = async () => {
+      setResult("✅ کلیک ثبت‌نام دریافت شد…");
       if (!isAuthorized) {
         showGate("برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.");
         return;
@@ -1206,11 +1207,19 @@ phoneBtn?.addEventListener("click", async () => {
       setResult("در حال ثبت نام...");
 
       try {
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), 12000); // 12s timeout (Telegram-safe)
+
         const res = await fetch("https://cf-init.esfex.workers.dev/api/register", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "text/plain;charset=UTF-8" }, // avoid preflight issues
+          referrerPolicy: "no-referrer",
           body: JSON.stringify(payload),
+          signal: controller.signal,
         });
+
+        clearTimeout(t);
+
 
         const raw = await res.text();
         let data;
