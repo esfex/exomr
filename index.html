@@ -1085,38 +1085,21 @@
       return /^[+]?\\d{8,15}$/.test(v);
     };
 
-    const fetchPhoneFromBackend = async () => {
-      const initData = window.Telegram?.WebApp?.initData || "";
-      if (!initData) {
-        setResult("initData یافت نشد. لطفاً از داخل تلگرام وارد شوید.", true);
-        return null;
-      }
-      try {
-        const res = await fetch("https://cf-init.esfex.workers.dev/api/profile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ initData }),
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          const msg = data?.error || data?.message || "شماره یافت نشد.";
-          setResult(msg, true);
-          return null;
-        }
-        if (data?.phone) {
-          const normalized = normalizePhone(data.phone);
-          phoneInput.value = normalized;
-          setResult("شماره موبایل از سرور دریافت شد.");
-          return normalized;
-        }
-        setResult("شماره‌ای ثبت نشده است.", true);
-        return null;
-      } catch (err) {
-        console.error("fetch phone error:", err);
-        setResult("خطای شبکه هنگام دریافت شماره.", true);
-        return null;
-      }
-    };
+    async function fetchPhoneFromBackend() {
+  const initData = window.Telegram?.WebApp?.initData;
+  if (!initData) return null;
+
+  const res = await fetch("/api/profile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ initData }),
+  });
+
+  if (!res.ok) return null;
+
+  const data = await res.json();
+  return data?.phone || null;
+}
 
     phoneBtn?.addEventListener("click", async () => {
   if (phoneBtn.disabled) return;
@@ -1144,22 +1127,20 @@
 
     // ⏳ Poll backend (max 10s)
     const start = Date.now();
-    const timeout = 10000;
+const timeout = 10000;
 
-    while (Date.now() - start < timeout) {
-      const r = await fetch("/api/profile", { credentials: "include" });
-      const data = await r.json();
+while (Date.now() - start < timeout) {
+  const phone = await fetchPhoneFromBackend();
+  if (phone) {
+    phoneInput.value = phone;
+    setResult("شماره موبایل با موفقیت دریافت شد");
+    return;
+  }
+  await new Promise(r => setTimeout(r, 1000));
+}
 
-      if (data?.phone) {
-        phoneInput.value = data.phone;
-        setResult("شماره موبایل با موفقیت دریافت شد");
-        return;
-      }
+setResult("دریافت شماره بیش از حد طول کشید. لطفاً دوباره تلاش کنید.", true);
 
-      await new Promise(r => setTimeout(r, 1000));
-    }
-
-    setResult("دریافت شماره بیش از حد طول کشید. لطفاً دوباره تلاش کنید.", true);
 
   } catch (err) {
     console.error("requestContact error:", err);
