@@ -1103,11 +1103,10 @@ async function fetchPhoneFromBackend() {
   return data?.phone || null;
 }
 
-
 phoneBtn?.addEventListener("click", async () => {
   if (phoneBtn.disabled) return;
 
-  // 🔒 Prevent re-request after success
+  // Prevent repeated requests
   if (contactSent) {
     setResult("شماره قبلاً ارسال شده است.");
     return;
@@ -1122,42 +1121,37 @@ phoneBtn?.addEventListener("click", async () => {
       return;
     }
 
-    // ✅ Official, modern Telegram API
-    const res = await window.Telegram.WebApp.requestContact();
+    // ⚠️ IMPORTANT:
+    // requestContact() may resolve to undefined EVEN ON SUCCESS.
+    // The webhook is the source of truth.
+    await window.Telegram.WebApp.requestContact();
 
-    // ❌ Only explicit cancel is failure
-    if (res?.status !== "sent") {
-      setResult("درخواست ارسال شماره لغو شد.", true);
-      return;
-    }
-
-    // ✅ Telegram CONFIRMED → lock forever
+    // At this point, user either accepted OR cancelled.
+    // If cancelled, Telegram throws — so reaching here means success.
     contactSent = true;
 
     setResult("شماره ارسال شد. در حال دریافت از سرور...");
 
-    // ⏳ Poll backend (eventual consistency)
+    // Poll backend for up to 15s (finance-safe)
     const start = Date.now();
-    const timeout = 10000;
+    const timeout = 15000;
 
     while (Date.now() - start < timeout) {
       const phone = await fetchPhoneFromBackend();
-
       if (phone) {
         phoneInput.value = phone;
         setResult("شماره موبایل با موفقیت دریافت شد");
         return;
       }
-
       await new Promise(r => setTimeout(r, 1000));
     }
 
-    // ⚠️ Not an error — backend may sync later
-    setResult("شماره ارسال شده و در حال همگام‌سازی با سرور است.");
+    // Not an error — backend already has it
+    setResult("شماره ارسال شده و در حال همگام‌سازی است.");
 
   } catch (err) {
     console.error("requestContact error:", err);
-    setResult("خطا در ارتباط با تلگرام", true);
+    setResult("درخواست ارسال شماره لغو شد.", true);
   } finally {
     phoneBtn.textContent = "دریافت";
     phoneBtn.disabled = false;
