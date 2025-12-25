@@ -841,7 +841,7 @@
 <div class="note">
   © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳
   <br />
-  v1.5
+  v1.7
 
 
     </div>
@@ -1118,7 +1118,10 @@ async function fetchPhoneFromBackend() {
 
   const res = await fetch(`${WORKER_BASE_URL}/api/profile`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-Req-Id": newReqId(),
+    },
     body: JSON.stringify({ initData }),
   });
 
@@ -1249,14 +1252,14 @@ phoneBtn?.addEventListener("click", async () => {
 
         if (!res.ok) {
           const msg =
-  typeof data === "string"
-    ? data
-    : data?.detail || data?.error || data?.message || `خطا (${res.status})`;
+            typeof data === "string"
+              ? data
+              : JSON.stringify(data, null, 2);
 
-          setResult(msg, true);
-          window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+          setResult(`❌ خطای ثبت‌نام:\n${msg}`, true);
           return;
         }
+
 
         setResult(typeof data === "string" ? data : JSON.stringify(data, null, 2));
         window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
