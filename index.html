@@ -1085,6 +1085,39 @@
       return /^[+]?\\d{8,15}$/.test(v);
     };
 
+    const fetchPhoneFromBackend = async () => {
+      const initData = window.Telegram?.WebApp?.initData || "";
+      if (!initData) {
+        setResult("initData یافت نشد. لطفاً از داخل تلگرام وارد شوید.", true);
+        return null;
+      }
+      try {
+        const res = await fetch("https://cf-init.esfex.workers.dev/api/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ initData }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const msg = data?.error || data?.message || "شماره یافت نشد.";
+          setResult(msg, true);
+          return null;
+        }
+        if (data?.phone) {
+          const normalized = normalizePhone(data.phone);
+          phoneInput.value = normalized;
+          setResult("شماره موبایل از سرور دریافت شد.");
+          return normalized;
+        }
+        setResult("شماره‌ای ثبت نشده است.", true);
+        return null;
+      } catch (err) {
+        console.error("fetch phone error:", err);
+        setResult("خطای شبکه هنگام دریافت شماره.", true);
+        return null;
+      }
+    };
+
     phoneBtn?.addEventListener("click", async () => {
       if (phoneBtn.disabled) return;
       try {
@@ -1105,13 +1138,11 @@
           setTimeout(() => resolve({ error: "timeout" }), 8000);
         });
 
-        if (response?.phone_number) {
-          phoneInput.value = normalizePhone(response.phone_number);
-          setResult("شماره موبایل از تلگرام دریافت شد");
-        } else if (response?.status === "sent") {
-          setResult("شماره به ربات ارسال شد؛ در صورت نیاز، لطفاً دوباره تلاش کنید.", true);
+        if (response?.status === "sent") {
+          setResult("شماره با موفقیت ارسال شد. در حال دریافت...");
+          await fetchPhoneFromBackend();
         } else {
-          setResult("شماره دریافت نشد", true);
+          setResult("کاربر اجازه ارسال شماره را نداد.", true);
         }
       } catch (err) {
         console.error("Phone request error:", err);
