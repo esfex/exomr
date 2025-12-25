@@ -438,6 +438,14 @@
       letter-spacing: 6px;
     }
 
+    .select-box:has(option[value=""]:checked) {
+     color: #A7B0C0; /* muted gray */
+    }
+
+    .select-box:not(:has(option[value=""]:checked)) {
+      color: #FFF; /* normal text */
+    }
+
     .phone-row {
       display: grid;
       grid-template-columns: auto 1fr;
