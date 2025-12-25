@@ -1119,39 +1119,56 @@
     };
 
     phoneBtn?.addEventListener("click", async () => {
-      if (phoneBtn.disabled) return;
-      try {
-        phoneBtn.disabled = true;
-        phoneBtn.textContent = "در حال درخواست...";
+  if (phoneBtn.disabled) return;
 
-        const requestContact = window.Telegram?.WebApp?.requestContact;
-        if (!requestContact) {
-          setResult("در این محیط نمی‌توان شماره را از تلگرام دریافت کرد.", true);
-          return;
-        }
+  try {
+    phoneBtn.disabled = true;
+    phoneBtn.textContent = "در حال درخواست...";
 
-        const response = await new Promise((resolve) => {
-          const maybePromise = requestContact((res) => resolve(res));
-          if (maybePromise?.then) {
-            maybePromise.then(resolve).catch((err) => resolve({ error: err?.message || "error" }));
-          }
-          setTimeout(() => resolve({ error: "timeout" }), 8000);
-        });
+    if (!window.Telegram?.WebApp?.requestContact) {
+      setResult("این قابلیت فقط داخل تلگرام فعال است.", true);
+      return;
+    }
 
-        if (response?.status === "sent" || response?.ok === true) {
-          setResult("شماره با موفقیت ارسال شد. در حال دریافت...");
-          await fetchPhoneFromBackend();
-        } else {
-          setResult("کاربر اجازه ارسال شماره را نداد.", true);
-        }
-      } catch (err) {
-        console.error("Phone request error:", err);
-        setResult("مجوز شماره موبایل داده نشد", true);
-      } finally {
-        phoneBtn.textContent = "دریافت";
-        phoneBtn.disabled = false;
+    // ✅ Modern, correct API usage
+    const res = await window.Telegram.WebApp.requestContact();
+
+    // ❌ Only explicit cancel is failure
+    if (res?.status !== "sent") {
+      setResult("درخواست ارسال شماره لغو شد.", true);
+      return;
+    }
+
+    // ✅ Success path
+    setResult("شماره ارسال شد. در حال دریافت از سرور...");
+
+    // ⏳ Poll backend (max 10s)
+    const start = Date.now();
+    const timeout = 10000;
+
+    while (Date.now() - start < timeout) {
+      const r = await fetch("/api/profile", { credentials: "include" });
+      const data = await r.json();
+
+      if (data?.phone) {
+        phoneInput.value = data.phone;
+        setResult("شماره موبایل با موفقیت دریافت شد");
+        return;
       }
-    });
+
+      await new Promise(r => setTimeout(r, 1000));
+    }
+
+    setResult("دریافت شماره بیش از حد طول کشید. لطفاً دوباره تلاش کنید.", true);
+
+  } catch (err) {
+    console.error("requestContact error:", err);
+    setResult("درخواست ارسال شماره لغو شد.", true);
+  } finally {
+    phoneBtn.textContent = "دریافت";
+    phoneBtn.disabled = false;
+  }
+});
 
     const submitRegistration = async () => {
       if (!isAuthorized) {
