@@ -865,6 +865,8 @@
     const openTermsBtn = document.getElementById("open-terms");
     const termsModal = document.getElementById("terms-modal");
     const closeTermsBtn = document.getElementById("close-terms");
+    const WORKER_BASE_URL = "https://cf-init.esfex.workers.dev";
+
     let index = 0;
     let pullStartY = 0;
     let pulling = false;
@@ -1091,7 +1093,7 @@ async function fetchPhoneFromBackend() {
   const initData = window.Telegram?.WebApp?.initData;
   if (!initData) return null;
 
-  const res = await fetch("/api/profile", {
+  const res = await fetch(`${WORKER_BASE_URL}/api/profile`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ initData }),
@@ -1102,6 +1104,7 @@ async function fetchPhoneFromBackend() {
   const data = await res.json();
   return data?.phone || null;
 }
+
 
 phoneBtn?.addEventListener("click", async () => {
   if (phoneBtn.disabled) return;
