@@ -418,7 +418,7 @@
     .select-box {
       width: 100%;
       border: 1px solid rgba(142, 219, 255, 0.35);
-      background: #rgba(255, 255, 255, 0.9);
+      background: #FFF;
       color: #000;
       border-radius: 12px;
       padding: 12px 14px;
@@ -434,10 +434,6 @@
       box-shadow: 0 0 0 3px rgba(63, 208, 255, 0.24);
     }
 
-    .input-box.phone {
-    letter-spacing: 6px;
-    }
-    
     .phone-row {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -569,11 +565,11 @@
 
     .terms-card {
       width: min(640px, 100%);
-      background: rgba(10, 31, 143, 0.9);
+      background: rgba(10, 31, 143, 0.95);
       border: 1px solid rgba(142, 219, 255, 0.3);
       border-radius: 16px;
       padding: 14px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
       display: grid;
       gap: 12px;
       max-height: 80vh;
@@ -604,12 +600,13 @@
       min-height: 360px;
       border-radius: 10px;
       border: 1px solid rgba(142, 219, 255, 0.28);
-      background: rgba(11, 77, 184, 0.12);
+      background: rgba(33, 33, 33, 0.22);
       color: rgba(255, 255, 255, 0.7);
       padding: 10px;
       font-family: "IRYekan", "Tahoma", sans-serif;
       font-size: 0.88rem;
       line-height: 1.6;
+      white-space: pre-wrap;
       resize: none;
       pointer-events: auto;
       overflow: auto;
@@ -733,7 +730,7 @@
           <span>شرایط و قوانین استفاده</span>
           <button type="button" class="terms-close" id="close-terms">بستن</button>
         </header>
-        <textarea class="terms-text" readonly>
+        <div class="terms-text" tabindex="0" role="document">
 ۱. مقدمه و پذیرش شرایط
 
 با ثبت‌نام، ورود یا استفاده از پلتفرم صرافی اسفندیاری، شما به‌عنوان «کاربر» تأیید می‌کنید که این شرایط و ضوابط را به‌طور کامل مطالعه کرده، درک نموده و بدون هیچ‌گونه قید و شرطی پذیرفته‌اید.
@@ -836,7 +833,7 @@
 ۱۱. تغییر شرایط
 
 پلتفرم صرافی اسفندیاری حق دارد در هر زمان این شرایط و ضوابط را اصلاح یا به‌روزرسانی کند.
-ادامه استفاده از خدمات به‌منزله پذیرش نسخه جدید خواهد بود.        </textarea>
+ادامه استفاده از خدمات به‌منزله پذیرش نسخه جدید خواهد بود.        </div>
       </div>
     </div>
 
