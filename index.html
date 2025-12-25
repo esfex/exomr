@@ -873,6 +873,11 @@
     let isAuthorized = false;
 
     console.log("UI loaded");
+    document.addEventListener("DOMContentLoaded", () => {
+      if (Telegram?.WebApp) {
+        Telegram.WebApp.disableVerticalSwipes();
+      }
+    });
 
     const showGate = (message) => {
       if (gateMessage && message) gateMessage.textContent = message;
