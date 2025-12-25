@@ -22,12 +22,6 @@
       font-display: swap;
     }
 
-    @property --cta-angle {
-      syntax: "<angle>";
-      inherits: false;
-      initial-value: 0deg;
-    }
-
     :root {
       --bg: #0A1F8F;
       --text: #ffffff;
@@ -227,15 +221,16 @@
       padding: 14px 18px;
       border: none;
       border-radius: 14px;
-      --cta-angle: 0deg;
-      background: linear-gradient(var(--cta-angle), var(--accent) 0%, var(--accent) 60%, var(--accent-strong) 100%);
+      background: linear-gradient(135deg,
+        rgba(63, 208, 255, 0.9) 0%,
+        rgba(63, 208, 255, 0.82) 60%,
+        rgba(11, 77, 184, 0.78) 100%);
       color: var(--cta-text);
       font-weight: 700;
       font-size: 1rem;
       font-family: inherit;
       cursor: pointer;
-      box-shadow: 0 12px 26px rgba(11, 77, 184, 0.32);
-      animation: cta-gradient-spin 6s linear infinite;
+      box-shadow: 0 12px 26px rgba(11, 77, 184, 0.24);
       transition: transform 0.15s ease, box-shadow 0.2s ease;
       display: block;
       margin: 0px auto 6px;
@@ -254,11 +249,6 @@
     .cta:active {
       transform: translateY(1px);
       box-shadow: 0 10px 20px rgba(11, 77, 184, 0.28);
-    }
-
-    @keyframes cta-gradient-spin {
-      from { --cta-angle: 0deg; }
-      to { --cta-angle: 360deg; }
     }
 
     .controls {
