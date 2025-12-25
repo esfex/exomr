@@ -841,12 +841,20 @@
 <div class="note">
   © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳
   <br />
-  v1.2
+  v1.3
 
 
     </div>
 
   <script>
+    function newReqId() {
+      return "req_" + Math.random().toString(36).slice(2, 10);
+    }
+
+    function uiLog(message) {
+      setResult("🧭 " + message);
+    }
+
     const root = document.documentElement;
     const track = document.querySelector("[data-track]");
     const slides = Array.from(document.querySelectorAll(".slide"));
@@ -1167,7 +1175,9 @@ phoneBtn?.addEventListener("click", async () => {
 });
 
     const submitRegistration = async () => {
-      setResult("✅ کلیک ثبت‌نام دریافت شد…");
+      const reqId = newReqId();
+      uiLog(`UI submit fired (${reqId})`);
+
       if (!isAuthorized) {
         showGate("برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.");
         return;
@@ -1213,14 +1223,20 @@ phoneBtn?.addEventListener("click", async () => {
       try {
         const controller = new AbortController();
         const t = setTimeout(() => controller.abort(), 12000); // 12s timeout (Telegram-safe)
+        const reqId = "req_" + Math.random().toString(36).slice(2, 10);
+        setResult(`🧭 register start (${reqId})`);
 
         const res = await fetch("https://cf-init.esfex.workers.dev/api/register", {
           method: "POST",
-          headers: { "Content-Type": "text/plain;charset=UTF-8" }, // avoid preflight issues
+          headers: {
+            "Content-Type": "text/plain;charset=UTF-8",
+            "X-Req-Id": reqId,
+          },
           referrerPolicy: "no-referrer",
           body: JSON.stringify(payload),
-          signal: controller.signal,
         });
+
+        uiLog(`UI received response (${reqId}) status=${res.status}`);
 
         clearTimeout(t);
 
