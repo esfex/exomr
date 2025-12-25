@@ -63,6 +63,14 @@
       padding-bottom: 110px;
     }
 
+    .is-hidden {
+      display: none !important;
+    }
+
+    .layout.is-locked {
+      display: none;
+    }
+
     .logo-wrap {
       display: grid;
       place-items: center;
@@ -523,8 +531,8 @@
       display: grid;
     }
 
-    .terms-card {
-      width: min(6400px, 100%);
+        .terms-card {
+      width: min(640px, 100%);
       background: rgba(12, 24, 48, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
@@ -555,7 +563,7 @@
       font: inherit;
     }
 
-        .terms-text {
+    .terms-text {
       width: 100%;
       min-height: 360px;
       border-radius: 10px;
@@ -572,6 +580,28 @@
       -webkit-overflow-scrolling: touch;
     }
 
+    .gate-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px 18px;
+      display: grid;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .gate-link {
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #0c1729;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 12px 26px rgba(42, 211, 139, 0.22);
+    }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -584,7 +614,7 @@
   </style>
 </head>
 <body>
-  <div class="layout">
+  <div class="layout is-locked" id="main-layout">
     <div class="logo-wrap">
       <div class="logo">
         <img src="./esf_modern.png" alt="لوگوی صرافی اسفندیاری">
@@ -771,8 +801,19 @@
     </div>
 
     </div>
+  </div>
 
-    
+  <div class="layout" id="gate-screen" aria-label="دسترسی محدود">
+    <div class="logo-wrap">
+      <div class="logo">
+        <img src="./esf_modern.png" alt="لوگو">
+      </div>
+    </div>
+    <div class="gate-card">
+      <h2 style="margin:0 0 6px;text-align:center;">دسترسی فقط از تلگرام</h2>
+      <p id="gate-message" style="margin:0 0 12px;color:var(--muted);text-align:center;">برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.</p>
+      <a class="gate-link" href="#" role="link">باز کردن ربات در تلگرام</a>
+    </div>
   </div>
 
 <div class="note">
@@ -788,7 +829,10 @@
     const dots = Array.from(document.querySelectorAll(".dot"));
     const startBtn = document.getElementById("start-btn");
     const ctaDynamic = document.getElementById("cta-dynamic");
-    const layout = document.querySelector(".layout");
+    const layout = document.getElementById("main-layout");
+    const gateScreen = document.getElementById("gate-screen");
+    const gateMessage = document.getElementById("gate-message");
+    const gateLink = document.querySelector(".gate-link");
     const resultBox = document.getElementById("result");
     const formPanel = document.getElementById("register-panel");
     const phoneBtn = document.getElementById("phone-btn");
@@ -804,8 +848,47 @@
     let pulling = false;
     let autoplay;
     let formMode = false;
+    let isAuthorized = false;
 
     console.log("UI loaded");
+
+    const showGate = (message) => {
+      if (gateMessage && message) gateMessage.textContent = message;
+      gateScreen?.classList.remove("is-hidden");
+      layout?.classList.add("is-locked");
+      isAuthorized = false;
+    };
+
+    const showApp = () => {
+      gateScreen?.classList.add("is-hidden");
+      layout?.classList.remove("is-locked");
+      isAuthorized = true;
+    };
+
+    const checkTelegramAccess = async () => {
+      const initData = window.Telegram?.WebApp?.initData || "";
+      if (!initData) {
+        showGate("برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.");
+        return;
+      }
+
+      try {
+        const res = await fetch("https://cf-init.esfex.workers.dev/api/auth/telegram", {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify({ initData }),
+        });
+        if (!res.ok) {
+          showGate("دسترسی ممکن نیست. لطفاً از داخل تلگرام وارد شوید.");
+          return;
+        }
+        showApp();
+      } catch (err) {
+        console.error("Gate check error:", err);
+        showGate("بررسی دسترسی ناموفق بود. لطفاً از داخل تلگرام دوباره تلاش کنید.");
+      }
+    };
     const setIndex = (i) => {
       index = ((i % slides.length) + slides.length) % slides.length;
       if (track) track.style.transform = `translate3d(-${index * 100}%, 0, 0)`;
@@ -819,6 +902,8 @@
 
     startAutoplay();
     setIndex(0);
+
+    checkTelegramAccess();
 
     const words = ["خرید", "فروش"];
     let wordIndex = 0;
@@ -947,6 +1032,10 @@
       }
     };
     const enterFormMode = () => {
+      if (!isAuthorized) {
+        showGate("برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.");
+        return;
+      }
       if (formMode) return;
       formMode = true;
       clearInterval(autoplay);
@@ -984,6 +1073,10 @@
     });
 
     const submitRegistration = async () => {
+      if (!isAuthorized) {
+        showGate("برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.");
+        return;
+      }
       const firstName = document.getElementById("first-name")?.value?.trim() || "";
       const lastName = document.getElementById("last-name")?.value?.trim() || "";
       const phone = phoneInput?.value?.trim() || "";
@@ -1097,6 +1190,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
