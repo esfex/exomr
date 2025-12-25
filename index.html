@@ -1090,14 +1090,26 @@
       try {
         phoneBtn.disabled = true;
         phoneBtn.textContent = "در حال درخواست...";
-        if (!window.Telegram?.WebApp?.requestPhoneNumber) {
+
+        const requestContact = window.Telegram?.WebApp?.requestContact;
+        if (!requestContact) {
           setResult("در این محیط نمی‌توان شماره را از تلگرام دریافت کرد.", true);
           return;
         }
-        const response = await window.Telegram.WebApp.requestPhoneNumber();
+
+        const response = await new Promise((resolve) => {
+          const maybePromise = requestContact((res) => resolve(res));
+          if (maybePromise?.then) {
+            maybePromise.then(resolve).catch((err) => resolve({ error: err?.message || "error" }));
+          }
+          setTimeout(() => resolve({ error: "timeout" }), 8000);
+        });
+
         if (response?.phone_number) {
           phoneInput.value = normalizePhone(response.phone_number);
           setResult("شماره موبایل از تلگرام دریافت شد");
+        } else if (response?.status === "sent") {
+          setResult("شماره به ربات ارسال شد؛ در صورت نیاز، لطفاً دوباره تلاش کنید.", true);
         } else {
           setResult("شماره دریافت نشد", true);
         }
