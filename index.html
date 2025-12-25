@@ -1073,14 +1073,25 @@
 
     startBtn?.addEventListener("click", enterFormMode);
 
+    const normalizePhone = (value) => (value || "").replace(/\s+/g, "");
+
+    const validatePhone = (value) => {
+      const v = normalizePhone(value);
+      return /^[+]?\\d{8,15}$/.test(v);
+    };
+
     phoneBtn?.addEventListener("click", async () => {
       if (phoneBtn.disabled) return;
       try {
         phoneBtn.disabled = true;
         phoneBtn.textContent = "در حال درخواست...";
-        const response = await window.Telegram?.WebApp?.requestPhoneNumber?.();
+        if (!window.Telegram?.WebApp?.requestPhoneNumber) {
+          setResult("در این محیط نمی‌توان شماره را از تلگرام دریافت کرد.", true);
+          return;
+        }
+        const response = await window.Telegram.WebApp.requestPhoneNumber();
         if (response?.phone_number) {
-          phoneInput.value = response.phone_number;
+          phoneInput.value = normalizePhone(response.phone_number);
           setResult("شماره موبایل از تلگرام دریافت شد");
         } else {
           setResult("شماره دریافت نشد", true);
@@ -1106,6 +1117,12 @@
       if (!firstName || !lastName || !phone || !country || !acceptTerms?.checked || !confirmIdentity?.checked) {
         window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
         setResult("لطفاً همه فیلدها را تکمیل و تیک‌ها را فعال کنید.", true);
+        return;
+      }
+
+      if (!validatePhone(phone)) {
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+        setResult("شماره موبایل معتبر نیست.", true);
         return;
       }
 
