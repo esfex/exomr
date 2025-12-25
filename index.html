@@ -434,6 +434,10 @@
       box-shadow: 0 0 0 3px rgba(63, 208, 255, 0.24);
     }
 
+    .input-box.input-phone{
+      letter-spacing: 6px;
+    }
+
     .phone-row {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -1159,6 +1163,8 @@ phoneBtn?.addEventListener("click", async () => {
       if (phone) {
         phoneInput.value = phone;
         setResult("شماره موبایل با موفقیت دریافت شد");
+        phoneBtn.textContent = "دریافت شد";
+    phoneBtn.disabled = true;
         return;
       }
       await new Promise(r => setTimeout(r, 1000));
@@ -1170,9 +1176,10 @@ phoneBtn?.addEventListener("click", async () => {
   } catch (err) {
     console.error("requestContact error:", err);
     setResult("درخواست ارسال شماره لغو شد.", true);
-  } finally {
-    phoneBtn.textContent = "دریافت";
+    phoneBtn.textContent = "دریافت مجدد";
     phoneBtn.disabled = false;
+  } finally {
+    
   }
 });
 
