@@ -22,13 +22,19 @@
       font-display: swap;
     }
 
+    @property --cta-angle {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
     :root {
       --bg: #0A1F8F;
       --text: #ffffff;
       --muted: rgba(142, 219, 255, 0.78);
       --accent: #3FD0FF;
       --accent-strong: #0B4DB8;
-      --cta-text: #0B1020;
+      --cta-text: #FFFFFF;
       --logo-ring-1: #2dd1a2;
       --logo-ring-2: #3cb7ff;
       --logo-ring-base: #030897;
@@ -193,7 +199,7 @@
       flex: 0 0 100%;
       min-width: 100%;
       direction: rtl;
-      padding: 14px 14px 16px;
+      padding: 14px 24px 16px;
       display: grid;
       gap: 8px;
       min-height: auto;
@@ -221,13 +227,15 @@
       padding: 14px 18px;
       border: none;
       border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      --cta-angle: 0deg;
+      background: linear-gradient(var(--cta-angle), var(--accent) 0%, var(--accent) 70%, var(--accent-strong) 100%);
       color: var(--cta-text);
       font-weight: 700;
       font-size: 1rem;
       font-family: inherit;
       cursor: pointer;
       box-shadow: 0 12px 26px rgba(11, 77, 184, 0.32);
+      animation: cta-gradient-spin 3s linear infinite;
       transition: transform 0.15s ease, box-shadow 0.2s ease;
       display: block;
       margin: 0px auto 6px;
@@ -246,6 +254,11 @@
     .cta:active {
       transform: translateY(1px);
       box-shadow: 0 10px 20px rgba(11, 77, 184, 0.28);
+    }
+
+    @keyframes cta-gradient-spin {
+      from { --cta-angle: 0deg; }
+      to { --cta-angle: 360deg; }
     }
 
     .controls {
@@ -1269,10 +1282,10 @@ phoneBtn?.addEventListener("click", async () => {
       const brand = {
         bg: "#0A1F8F",
         text: "#ffffff",
-        muted: "rgba(142, 219, 255, 0.78)",
+        muted: "rgba(255, 255, 255, 0.78)",
         accent: "#3FD0FF",
         accentStrong: "#0B4DB8",
-        ctaText: "#0B1020",
+        ctaText: "#FFFFFF",
       };
       root.style.setProperty("--bg", brand.bg);
       root.style.setProperty("--text", brand.text);
