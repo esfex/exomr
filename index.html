@@ -701,6 +701,41 @@
         box-shadow: 0 12px 26px rgba(11, 77, 184, 0.32);
       }
 
+      .loading-spinner {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 3px solid rgba(63, 208, 255, 0.25);
+        border-top-color: var(--accent);
+        margin: 0 auto;
+        animation: spin-border 0.9s linear infinite;
+      }
+
+      .loading-message {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .retry-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(63, 208, 255, 0.35);
+        background: rgba(63, 208, 255, 0.12);
+        color: var(--text);
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(10, 31, 143, 0.26);
+      }
+
+      .retry-btn:active {
+        transform: translateY(1px);
+      }
+
       @keyframes fadeUp {
         from {
           opacity: 0;
@@ -888,6 +923,16 @@
       </div>
     </div>
     <div class="note"> © صرافی تضامنی اسفندیاری – شماره ثبت ۴۸۶۵۲۳ </div>
+    <div class="layout is-hidden" id="loading-screen" aria-label="Loading">
+      <div class="logo-wrap">
+        <div class="logo"><img src="./esf_modern.png" alt="Esfex"></div>
+      </div>
+      <div class="gate-card">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p id="loading-message" class="loading-message" style="margin:0;">در حال بررسی دسترسی...</p>
+        <button class="retry-btn is-hidden" id="retry-btn" type="button">تلاش مجدد</button>
+      </div>
+    </div>
     <script>
       const root = document.documentElement;
       const track = document.querySelector("[data-track]");
@@ -899,6 +944,9 @@
       const gateScreen = document.getElementById("gate-screen");
       const gateMessage = document.getElementById("gate-message");
       const gateLink = document.querySelector(".gate-link");
+      const loadingScreen = document.getElementById("loading-screen");
+      const loadingMessage = document.getElementById("loading-message");
+      const retryBtn = document.getElementById("retry-btn");
       const resultBox = document.getElementById("result");
       const formPanel = document.getElementById("register-panel");
       const phoneBtn = document.getElementById("phone-btn");
@@ -938,44 +986,67 @@
               Telegram.WebApp.disableVerticalSwipes();
           }
       });
+      const showLoading = (message, showRetry = false) => {
+          if (loadingMessage && message) loadingMessage.textContent = message;
+          retryBtn?.classList.toggle("is-hidden", !showRetry);
+          loadingScreen?.classList.remove("is-hidden");
+          gateScreen?.classList.add("is-hidden");
+          layout?.classList.add("is-locked");
+      };
       const showGate = (message) => {
           if (gateMessage && message) gateMessage.textContent = message;
           gateScreen?.classList.remove("is-hidden");
+          loadingScreen?.classList.add("is-hidden");
           layout?.classList.add("is-locked");
           isAuthorized = false;
       };
       const showApp = () => {
           gateScreen?.classList.add("is-hidden");
+          loadingScreen?.classList.add("is-hidden");
           layout?.classList.remove("is-locked");
           isAuthorized = true;
       };
-      const checkTelegramAccess = async () => {
+      const checkSessionAccess = async () => {
+          showLoading("در حال بررسی دسترسی...");
           const initData = window.Telegram?.WebApp?.initData || "";
           if (!initData) {
-              showGate("برای استفاده از پلتفرم، لطفاً از داخل تلگرام وارد شوید.");
+              showGate();
               return;
           }
           try {
-              const res = await fetch("https://cf-init.esfex.workers.dev/api/auth/telegram", {
+              const res = await fetch(`${WORKER_BASE_URL}/api/session`, {
                   method: "POST",
                   headers: {
-                      "Content-Type": "text/plain;charset=UTF-8"
+                      "Content-Type": "application/json"
                   },
-                  referrerPolicy: "no-referrer",
                   body: JSON.stringify({
                       initData
                   }),
               });
+              const data = await res.json().catch(() => ({}));
               if (!res.ok) {
-                  showGate("دسترسی ممکن نیست. لطفاً از داخل تلگرام وارد شوید.");
+                  if (res.status === 401 || res.status === 403) {
+                      showGate();
+                      return;
+                  }
+                  showLoading("خطا در ارتباط. دوباره تلاش کنید.", true);
+                  return;
+              }
+              if (!data?.ok) {
+                  showGate();
+                  return;
+              }
+              if (data?.registered) {
+                  window.location.assign("./app.html");
                   return;
               }
               showApp();
           } catch (err) {
-              console.error("Gate check error:", err);
-              showGate("بررسی دسترسی ناموفق بود. لطفاً از داخل تلگرام دوباره تلاش کنید.");
+              console.error("Session check error:", err);
+              showLoading("خطا در ارتباط. دوباره تلاش کنید.", true);
           }
       };
+
       const setIndex = (i) => {
           index = ((i % slides.length) + slides.length) % slides.length;
           if (track) track.style.transform = `translate3d(-${index * 100}%, 0, 0)`;
@@ -987,7 +1058,10 @@
       };
       startAutoplay();
       setIndex(0);
-      checkTelegramAccess();
+      checkSessionAccess();
+      retryBtn?.addEventListener("click", () => {
+          checkSessionAccess();
+      });
       const words = ["خرید", "فروش"];
       let wordIndex = 0;
       const swapWord = () => {
@@ -1156,15 +1230,9 @@
                   setResult("این قابلیت فقط داخل تلگرام فعال است.", true);
                   return;
               }
-              // ⚠️ IMPORTANT:
-              // requestContact() may resolve to undefined EVEN ON SUCCESS.
-              // The webhook is the source of truth.
               await window.Telegram.WebApp.requestContact();
-              // At this point, user either accepted OR cancelled.
-              // If cancelled, Telegram throws — so reaching here means success.
               contactSent = true;
               setResult("شماره ارسال شد. در حال دریافت از سرور...");
-              // Poll backend for up to 15s (finance-safe)
               const start = Date.now();
               const timeout = 15000;
               while (Date.now() - start < timeout) {
@@ -1178,7 +1246,6 @@
                   }
                   await new Promise(r => setTimeout(r, 1000));
               }
-              // Not an error — backend already has it
               setResult("شماره ارسال شده و در حال همگام‌سازی است.");
           } catch (err) {
               console.error("requestContact error:", err);
@@ -1254,8 +1321,8 @@
                   window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("warning");
                   return;
               }
-              setResult(typeof data === "string" ? data : JSON.stringify(data, null, 2));
               window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
+              window.location.assign("./app.html");
           } catch (err) {
               console.error("Register error:", err);
               const msg = err?.message ? `خطای شبکه: ${err.message}` : "خطای شبکه";

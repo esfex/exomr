@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0A143F">
+    <title>Esfex | داشبورد</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      @font-face {
+        font-family: "IRYekan";
+        src: url("./fonts/IRANYekanXFaNum-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "IRYekan";
+        src: url("./fonts/IRANYekanXFaNum-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      :root {
+        --bg: #0A143F;
+        --text: #ffffff;
+        --muted: rgba(142, 219, 255, 0.78);
+        --accent: #3FD0FF;
+        --accent-strong: #0B4DB8;
+        --cta-text: #FFFFFF;
+        --card: rgba(11, 77, 184, 0.18);
+        --card-border: rgba(142, 219, 255, 0.2);
+        --shadow: 0 16px 30px rgba(10, 31, 143, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "IRYekan", "Tahoma", sans-serif;
+        background: linear-gradient(135deg,
+            #050914 0%,
+            #0A143F 55%,
+            #0A2D70 100%);
+        color: var(--text);
+        padding: calc(18px + env(safe-area-inset-top)) 16px calc(110px + env(safe-area-inset-bottom));
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      .layout {
+        width: min(520px, 100%);
+        display: grid;
+        gap: 18px;
+        position: relative;
+      }
+
+      .is-hidden {
+        display: none !important;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 10px;
+        direction: ltr;
+      }
+
+      .user-pill {
+        background: rgba(63, 208, 255, 0.14);
+        border: 1px solid rgba(63, 208, 255, 0.28);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: var(--text);
+        min-width: 84px;
+        text-align: center;
+        box-shadow: 0 8px 16px rgba(10, 31, 143, 0.24);
+      }
+
+      .title {
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .menu-btn {
+        border: 1px solid rgba(63, 208, 255, 0.3);
+        background: rgba(63, 208, 255, 0.12);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 10px 18px rgba(10, 31, 143, 0.22);
+      }
+
+      .progress-card {
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 14px;
+      }
+
+      .progress-wrap {
+        position: relative;
+        display: grid;
+        place-items: center;
+        padding-top: 6px;
+      }
+
+      .progress-arc {
+        width: 240px;
+        height: 130px;
+      }
+
+      .arc-bg,
+      .arc-progress {
+        fill: none;
+        stroke-width: 14;
+        stroke-linecap: round;
+      }
+
+      .arc-bg {
+        stroke: rgba(142, 219, 255, 0.2);
+      }
+
+      .arc-progress {
+        stroke: var(--accent);
+        filter: drop-shadow(0 6px 12px rgba(63, 208, 255, 0.35));
+        transition: stroke-dasharray 0.6s ease;
+      }
+
+      .progress-center {
+        position: absolute;
+        top: 22px;
+        text-align: center;
+        width: 100%;
+        display: grid;
+        gap: 8px;
+        padding: 0 20px;
+      }
+
+      .progress-small {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+
+      .progress-title {
+        font-size: 0.98rem;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      .cta {
+        justify-self: center;
+        padding: 12px 22px;
+        border: none;
+        border-radius: 14px;
+        background: linear-gradient(135deg,
+            rgba(63, 208, 255, 0.95) 0%,
+            rgba(63, 208, 255, 0.85) 70%,
+            rgba(11, 77, 184, 0.8) 120%);
+        color: var(--cta-text);
+        font-weight: 700;
+        font-size: 1rem;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 12px 24px rgba(11, 77, 184, 0.3);
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .action-btn {
+        background: rgba(11, 77, 184, 0.2);
+        border: 1px solid rgba(142, 219, 255, 0.22);
+        border-radius: 14px;
+        padding: 12px 8px;
+        display: grid;
+        gap: 8px;
+        justify-items: center;
+        color: var(--text);
+        font-family: inherit;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.2s ease;
+      }
+
+      .action-btn:active {
+        transform: translateY(1px);
+      }
+
+      .action-icon {
+        width: 24px;
+        height: 24px;
+        stroke: var(--accent);
+        stroke-width: 2;
+        fill: none;
+      }
+
+      .action-label {
+        font-size: 0.82rem;
+      }
+
+      .summary {
+        display: grid;
+        gap: 12px;
+      }
+
+      .summary-row {
+        background: rgba(11, 77, 184, 0.18);
+        border: 1px solid rgba(142, 219, 255, 0.22);
+        border-radius: 16px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        box-shadow: 0 12px 20px rgba(10, 31, 143, 0.22);
+      }
+
+      .summary-left {
+        display: grid;
+        gap: 6px;
+      }
+
+      .summary-label {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .summary-icon {
+        width: 22px;
+        height: 22px;
+        stroke: var(--accent);
+        stroke-width: 2;
+        fill: none;
+        margin-inline-start: 4px;
+      }
+
+      .summary-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 700;
+      }
+
+      .summary-amount {
+        text-align: end;
+        display: grid;
+        gap: 4px;
+      }
+
+      .summary-main {
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+
+      .summary-sub {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .bottom-nav {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        background: rgba(6, 12, 32, 0.9);
+        border: 1px solid rgba(142, 219, 255, 0.2);
+        border-radius: 18px;
+        padding: 10px 12px;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+        box-shadow: 0 16px 30px rgba(10, 31, 143, 0.35);
+        backdrop-filter: blur(14px);
+      }
+
+      .nav-item {
+        display: grid;
+        gap: 4px;
+        justify-items: center;
+        font-size: 0.72rem;
+        color: rgba(142, 219, 255, 0.7);
+      }
+
+      .nav-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(142, 219, 255, 0.4);
+      }
+
+      .nav-item.is-active {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .nav-item.is-active .nav-dot {
+        background: var(--accent);
+        box-shadow: 0 0 12px rgba(63, 208, 255, 0.6);
+      }
+
+      .gate {
+        width: min(520px, 100%);
+        background: rgba(11, 77, 184, 0.18);
+        border: 1px solid rgba(142, 219, 255, 0.28);
+        border-radius: 18px;
+        padding: 18px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 10px;
+      }
+
+      .gate-link {
+        display: inline-block;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: var(--cta-text);
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      @media (max-width: 420px) {
+        .progress-arc {
+          width: 210px;
+          height: 115px;
+        }
+
+        .actions {
+          gap: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout is-hidden" id="app-root">
+      <header class="topbar">
+        <div class="user-pill" id="user-pill">کاربر</div>
+        <div class="title">داشبورد</div>
+        <button class="menu-btn" type="button" aria-label="منو">&#8942;</button>
+      </header>
+
+      <section class="progress-card" aria-label="پیشرفت">
+        <div class="progress-wrap">
+          <svg class="progress-arc" viewBox="0 0 220 120" aria-hidden="true">
+            <path class="arc-bg" d="M 10 110 A 100 100 0 0 1 210 110"></path>
+            <path class="arc-progress" d="M 10 110 A 100 100 0 0 1 210 110"></path>
+          </svg>
+          <div class="progress-center">
+            <div class="progress-small" id="progress-remaining">۳ مرحله باقی مانده</div>
+            <div class="progress-title" id="progress-title">برای شروع معامله، تکمیل کنید</div>
+          </div>
+        </div>
+        <button class="cta" type="button">ادامه</button>
+      </section>
+
+      <section class="actions" aria-label="دسترسی سریع">
+        <button class="action-btn" type="button">
+          <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 4v16"></path>
+            <path d="M6 10l6-6 6 6"></path>
+          </svg>
+          <span class="action-label">خرید</span>
+        </button>
+        <button class="action-btn" type="button">
+          <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20V4"></path>
+            <path d="M18 14l-6 6-6-6"></path>
+          </svg>
+          <span class="action-label">فروش</span>
+        </button>
+        <button class="action-btn" type="button">
+          <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+            <path d="M12 8v8"></path>
+            <path d="M8 12h8"></path>
+          </svg>
+          <span class="action-label">واریز</span>
+        </button>
+        <button class="action-btn" type="button">
+          <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+            <path d="M8 12h8"></path>
+          </svg>
+          <span class="action-label">برداشت</span>
+        </button>
+      </section>
+
+      <section class="summary" aria-label="خلاصه حساب">
+        <div class="summary-row">
+          <div class="summary-left">
+            <div class="summary-title">
+              <svg class="summary-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle>
+                <path d="M8 12h8"></path>
+              </svg>
+              موجودی ریال عمانی
+            </div>
+            <div class="summary-label">کیف پول اصلی</div>
+          </div>
+          <div class="summary-amount">
+            <div class="summary-main">۳٬۹۸۰ ر.ع</div>
+            <div class="summary-sub">معادل ۱۰٬۳۵۰ دلار</div>
+          </div>
+        </div>
+        <div class="summary-row">
+          <div class="summary-left">
+            <div class="summary-title">
+              <svg class="summary-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3l7 4v10l-7 4-7-4V7z"></path>
+                <path d="M12 3v18"></path>
+              </svg>
+              موجودی دلاری
+            </div>
+            <div class="summary-label">جمع دارایی</div>
+          </div>
+          <div class="summary-amount">
+            <div class="summary-main">$2,420.00</div>
+            <div class="summary-sub">معادل ۹۳۱ ر.ع</div>
+          </div>
+        </div>
+      </section>
+
+      <nav class="bottom-nav" aria-label="اصلی">
+        <div class="nav-item is-active">
+          <span class="nav-dot"></span>
+          داشبورد
+        </div>
+        <div class="nav-item">
+          <span class="nav-dot"></span>
+          معامله
+        </div>
+        <div class="nav-item">
+          <span class="nav-dot"></span>
+          سفارش‌ها
+        </div>
+        <div class="nav-item">
+          <span class="nav-dot"></span>
+          کیف پول
+        </div>
+        <div class="nav-item">
+          <span class="nav-dot"></span>
+          تاریخچه
+        </div>
+      </nav>
+    </div>
+
+    <div class="gate is-hidden" id="gate-screen">
+      <h3 style="margin:0;">دسترسی لازم است</h3>
+      <p id="gate-message" style="margin:0;color:var(--muted);">
+        برای ادامه، این اپ را داخل تلگرام باز کنید.
+      </p>
+      <a class="gate-link" href="https://t.me" rel="noreferrer">باز کردن تلگرام</a>
+    </div>
+
+    <script>
+      const WORKER_BASE_URL = "https://cf-init.esfex.workers.dev";
+      const appRoot = document.getElementById("app-root");
+      const gateScreen = document.getElementById("gate-screen");
+      const gateMessage = document.getElementById("gate-message");
+      const userPill = document.getElementById("user-pill");
+      const progressRemaining = document.getElementById("progress-remaining");
+      const arcProgress = document.querySelector(".arc-progress");
+
+      const stepsTotal = 5;
+      const stepsCompleted = 2;
+
+      const showGate = (message) => {
+        if (gateMessage && message) gateMessage.textContent = message;
+        gateScreen?.classList.remove("is-hidden");
+        appRoot?.classList.add("is-hidden");
+      };
+
+      const showApp = () => {
+        gateScreen?.classList.add("is-hidden");
+        appRoot?.classList.remove("is-hidden");
+      };
+
+      const updateProgress = () => {
+        const remaining = Math.max(stepsTotal - stepsCompleted, 0);
+        if (progressRemaining) {
+          progressRemaining.textContent = `${remaining} مرحله باقی مانده`;
+        }
+        if (!arcProgress) return;
+        const length = arcProgress.getTotalLength();
+        const progress = stepsTotal > 0 ? Math.min(stepsCompleted / stepsTotal, 1) : 0;
+        arcProgress.style.strokeDasharray = `${length * progress} ${length}`;
+      };
+
+      const loadSession = async () => {
+        const initData = window.Telegram?.WebApp?.initData || "";
+        if (!initData) {
+          showGate("برای ادامه، این اپ را داخل تلگرام باز کنید.");
+          return;
+        }
+        try {
+          const res = await fetch(`${WORKER_BASE_URL}/api/session`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ initData }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data?.ok) {
+            showGate("دسترسی نامعتبر است.");
+            return;
+          }
+          if (!data?.registered) {
+            showGate("ابتدا ثبت نام را تکمیل کنید.");
+            return;
+          }
+          const firstName =
+            data?.user?.first_name ||
+            data?.telegram_user?.first_name ||
+            "User";
+          if (userPill) userPill.textContent = firstName;
+          showApp();
+        } catch (err) {
+          console.error("Session check error:", err);
+          showGate("خطا در ارتباط. دوباره تلاش کنید.");
+        }
+      };
+
+      updateProgress();
+      if (window.Telegram?.WebApp) {
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand?.();
+      }
+      loadSession();
+    </script>
+  </body>
+</html>
