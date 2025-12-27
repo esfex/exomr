@@ -404,14 +404,14 @@
       }
 
       .result {
-        margin-top: 6px;
+        margin: 0px;
         text-align: center;
         color: var(--text);
         font-size: 0.95rem;
         min-height: 24px;
         word-break: break-word;
         white-space: pre-wrap;
-        display: none !important;
+        
       }
 
       .result.is-error {
@@ -745,11 +745,11 @@
         </div>
       </section><button class="cta" type="button" id="start-btn" aria-label="ثبت نام" style="justify-self:center; margin:0 auto 5px; display:block; text-align:center;">ثبت نام و <span id="cta-dynamic">خرید</span><span class="progress"></span><span class="premium-bar"></span></button>
       <div class="controls"></div>
-      <div id="result" class="result" aria-live="polite"></div>
+      
       
       <!--- <h3 class="form-title">ثبت‌نام در صرافی اسفندیاری</h3> --->
       <div class="form-panel" id="register-panel" aria-label="فرم ثبت نام" role="form">
-        
+        <div id="result" class="result" aria-live="polite"></div>
         <div class="field" style="--idx:0"><input id="first-name" name="first_name" type="text" class="input-box" placeholder="نام" autocomplete="given-name" /></div>
         <div class="field" style="--idx:1"><input id="last-name" name="last_name" type="text" class="input-box" placeholder="نام خانوادگی" autocomplete="family-name" /></div>
         <div class="field" style="--idx:2">
