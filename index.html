@@ -1191,6 +1191,15 @@
           const lastName = document.getElementById("last-name")?.value?.trim() || "";
           const phone = phoneInput?.value?.trim() || "";
           const country = document.getElementById("country")?.value || "";
+          console.log({
+            firstName,
+            lastName,
+            phone,
+            country,
+            accept: acceptTerms?.checked,
+            confirm: confirmIdentity?.checked,
+          });
+
           if (!firstName || !lastName || !phone || !country || !acceptTerms?.checked || !confirmIdentity?.checked) {
               window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("warning");
               setResult("لطفاً همه فیلدها را تکمیل و تیک‌ها را فعال کنید.", true);
