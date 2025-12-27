@@ -281,6 +281,242 @@
         color: var(--muted);
       }
 
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .deposit-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(3, 8, 18, 0.65);
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        z-index: 30;
+      }
+
+      .deposit-panel {
+        width: min(520px, 100%);
+        background: rgba(11, 77, 184, 0.2);
+        border: 1px solid rgba(142, 219, 255, 0.3);
+        border-radius: 18px;
+        padding: 16px;
+        display: grid;
+        gap: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .input-box {
+        width: 100%;
+        border: 1px solid rgba(142, 219, 255, 0.35);
+        background: #fff;
+        color: #000;
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-family: inherit;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .input-box:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(63, 208, 255, 0.24);
+      }
+
+      .deposit-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .deposit-title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      .deposit-close {
+        border: none;
+        background: rgba(63, 208, 255, 0.14);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 4px 10px;
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+
+      .deposit-timer {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(63, 208, 255, 0.12);
+        border: 1px solid rgba(63, 208, 255, 0.28);
+        font-size: 0.82rem;
+      }
+
+      .deposit-timer strong {
+        font-size: 0.95rem;
+      }
+
+      .deposit-status {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(142, 219, 255, 0.25);
+        background: rgba(11, 77, 184, 0.16);
+        color: var(--muted);
+        font-size: 0.88rem;
+        text-align: center;
+      }
+
+      .deposit-status.is-error {
+        color: #ffb3b3;
+        border-color: rgba(255, 155, 155, 0.45);
+      }
+
+      .deposit-status.is-success {
+        color: #9ce9c8;
+        border-color: rgba(156, 233, 200, 0.4);
+      }
+
+      .deposit-request {
+        display: grid;
+        gap: 10px;
+      }
+
+      .deposit-bank-card {
+        background: rgba(11, 77, 184, 0.14);
+        border: 1px solid rgba(142, 219, 255, 0.22);
+        border-radius: 16px;
+        padding: 12px 14px;
+        display: grid;
+        gap: 6px;
+        font-size: 0.9rem;
+      }
+
+      .deposit-bank-card strong {
+        font-weight: 700;
+      }
+
+      .deposit-upload {
+        display: grid;
+        gap: 10px;
+      }
+
+      .upload-label {
+        font-size: 0.88rem;
+      }
+
+      .upload-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .upload-placeholder {
+        border: 1px dashed rgba(142, 219, 255, 0.4);
+        border-radius: 12px;
+        min-height: 76px;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-align: center;
+        padding: 6px;
+      }
+
+      .upload-btn {
+        justify-self: start;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(63, 208, 255, 0.35);
+        background: rgba(63, 208, 255, 0.12);
+        color: var(--text);
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(10, 31, 143, 0.26);
+      }
+
+      .upload-btn[disabled] {
+        opacity: 0.55;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg,
+            rgba(63, 208, 255, 0.95) 0%,
+            rgba(63, 208, 255, 0.85) 70%,
+            rgba(11, 77, 184, 0.8) 120%);
+        color: var(--cta-text);
+        font-weight: 700;
+        font-size: 1rem;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 12px 24px rgba(11, 77, 184, 0.3);
+      }
+
+      .submit-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 10px 20px rgba(11, 77, 184, 0.28);
+      }
+
+      .submit-btn[disabled] {
+        opacity: 0.55;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+      }
+
+      .receipt-thumb {
+        position: relative;
+        border: 1px solid rgba(142, 219, 255, 0.3);
+        border-radius: 12px;
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+        background: rgba(6, 12, 32, 0.4);
+      }
+
+      .receipt-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .remove-receipt {
+        position: absolute;
+        top: 6px;
+        inset-inline-end: 6px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 0, 0, 0.55);
+        color: #fff;
+        cursor: pointer;
+        font-size: 0.9rem;
+        line-height: 1;
+      }
+
+      .deposit-body {
+        display: grid;
+        gap: 12px;
+      }
+
       .bottom-nav {
         position: fixed;
         left: 16px;
@@ -393,7 +629,7 @@
           </svg>
           <span class="action-label">فروش</span>
         </button>
-        <button class="action-btn" type="button">
+        <button class="action-btn" type="button" id="deposit-action">
           <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="4" y="4" width="16" height="16" rx="3"></rect>
             <path d="M12 8v8"></path>
@@ -467,6 +703,83 @@
           تاریخچه
         </div>
       </nav>
+
+      <div class="deposit-modal is-hidden" id="deposit-modal" role="dialog" aria-modal="true">
+        <section class="deposit-panel" id="deposit-panel" aria-label="واریز ریال عمانی (OMR)">
+          <div class="deposit-header">
+            <h3 class="deposit-title">واریز ریال عمانی (OMR)</h3>
+            <button class="deposit-close" id="deposit-close" type="button" aria-label="بستن">×</button>
+          </div>
+
+          <div class="deposit-timer is-hidden" id="deposit-timer">
+            <span>زمان باقی‌مانده:</span>
+            <strong id="deposit-countdown">15:00</strong>
+          </div>
+
+          <div class="deposit-status is-hidden" id="deposit-status"></div>
+
+          <div class="deposit-request" id="deposit-request">
+            <div class="field">
+              <input
+                type="number"
+                inputmode="decimal"
+                step="0.001"
+                min="0"
+                class="input-box"
+                id="deposit-amount"
+                placeholder="مبلغ درخواستی (OMR)"
+              />
+            </div>
+            <button type="button" class="submit-btn" id="create-deposit-btn">
+              ایجاد درخواست
+            </button>
+          </div>
+
+          <div class="deposit-body is-hidden" id="deposit-body">
+            <div class="deposit-bank-card">
+              <div><strong>بانک:</strong> <span id="bank-name">—</span></div>
+              <div><strong>شماره حساب:</strong> <span id="bank-account">—</span></div>
+              <div><strong>IBAN:</strong> <span id="bank-iban">—</span></div>
+              <div><strong>نام دارنده:</strong> <span id="bank-holder">—</span></div>
+            </div>
+
+            <div class="deposit-upload">
+              <label class="upload-label">رسید واریز (حداکثر ۳ تصویر)</label>
+              <div class="upload-grid" id="receipt-grid">
+                <div class="upload-placeholder" id="receipt-placeholder">تصویر رسید را اضافه کنید</div>
+              </div>
+              <button type="button" class="upload-btn" id="add-receipt-btn">
+                + افزودن تصویر
+              </button>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                id="receipt-input"
+                class="is-hidden"
+              />
+            </div>
+
+            <div class="field">
+              <input
+                type="number"
+                inputmode="decimal"
+                step="0.001"
+                min="0"
+                class="input-box"
+                id="receipt-amount"
+                placeholder="مبلغ واریزی (OMR)"
+              />
+            </div>
+
+            <button type="button" class="submit-btn" id="submit-deposit-btn" disabled>
+              تأیید و ارسال
+            </button>
+            <button type="button" class="upload-btn is-hidden" id="deposit-retry-btn">
+              ایجاد درخواست جدید
+            </button>
+          </div>
+        </section>
+      </div>
     </div>
 
     <div class="gate is-hidden" id="gate-screen">
@@ -489,10 +802,43 @@
       const availableSub = document.getElementById("available-sub");
       const lockedMain = document.getElementById("locked-main");
       const lockedSub = document.getElementById("locked-sub");
+      const depositAction = document.getElementById("deposit-action");
+      const depositModal = document.getElementById("deposit-modal");
+      const depositClose = document.getElementById("deposit-close");
+      const depositTimer = document.getElementById("deposit-timer");
+      const depositCountdown = document.getElementById("deposit-countdown");
+      const depositStatus = document.getElementById("deposit-status");
+      const depositRequest = document.getElementById("deposit-request");
+      const depositBody = document.getElementById("deposit-body");
+      const depositAmount = document.getElementById("deposit-amount");
+      const createDepositBtn = document.getElementById("create-deposit-btn");
+      const bankName = document.getElementById("bank-name");
+      const bankAccount = document.getElementById("bank-account");
+      const bankIban = document.getElementById("bank-iban");
+      const bankHolder = document.getElementById("bank-holder");
+      const receiptGrid = document.getElementById("receipt-grid");
+      const receiptPlaceholder = document.getElementById("receipt-placeholder");
+      const addReceiptBtn = document.getElementById("add-receipt-btn");
+      const receiptInput = document.getElementById("receipt-input");
+      const receiptAmount = document.getElementById("receipt-amount");
+      const submitDepositBtn = document.getElementById("submit-deposit-btn");
+      const depositRetryBtn = document.getElementById("deposit-retry-btn");
 
       const stepsTotal = 5;
       const stepsCompleted = 2;
       const USD_PER_OMR = 2.6;
+      const MAX_RECEIPTS = 3;
+      const MAX_RECEIPT_SIZE = 5 * 1024 * 1024;
+      const ALLOWED_RECEIPT_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+      let sessionInitData = "";
+      let depositTimerId = null;
+      let depositState = {
+        depositId: null,
+        expiresAt: null,
+        storageKeys: [],
+        status: "idle",
+      };
 
       const showGate = (message) => {
         if (gateMessage && message) gateMessage.textContent = message;
@@ -566,6 +912,323 @@
         }
       };
 
+      const setDepositStatus = (message, type = "info") => {
+        if (!depositStatus) return;
+        if (!message) {
+          depositStatus.classList.add("is-hidden");
+          depositStatus.textContent = "";
+          depositStatus.classList.remove("is-error", "is-success");
+          return;
+        }
+        depositStatus.textContent = message;
+        depositStatus.classList.remove("is-hidden", "is-error", "is-success");
+        if (type === "error") depositStatus.classList.add("is-error");
+        if (type === "success") depositStatus.classList.add("is-success");
+      };
+
+      const resetDepositUI = () => {
+        depositState = {
+          depositId: null,
+          expiresAt: null,
+          storageKeys: [],
+          status: "idle",
+        };
+        if (depositTimerId) {
+          clearInterval(depositTimerId);
+          depositTimerId = null;
+        }
+        depositTimer?.classList.add("is-hidden");
+        depositRequest?.classList.remove("is-hidden");
+        depositBody?.classList.add("is-hidden");
+        depositRetryBtn?.classList.add("is-hidden");
+        if (depositAmount) depositAmount.value = "";
+        if (receiptAmount) receiptAmount.value = "";
+        if (submitDepositBtn) submitDepositBtn.disabled = true;
+        if (addReceiptBtn) addReceiptBtn.disabled = false;
+        if (receiptInput) receiptInput.value = "";
+        if (receiptGrid) {
+          receiptGrid.querySelectorAll(".receipt-thumb").forEach((node) => node.remove());
+        }
+        receiptPlaceholder?.classList.remove("is-hidden");
+        if (bankName) bankName.textContent = "—";
+        if (bankAccount) bankAccount.textContent = "—";
+        if (bankIban) bankIban.textContent = "—";
+        if (bankHolder) bankHolder.textContent = "—";
+        if (receiptAmount) receiptAmount.disabled = false;
+        setDepositStatus("");
+      };
+
+      const openDepositPanel = () => {
+        depositModal?.classList.remove("is-hidden");
+        document.body.classList.add("modal-open");
+        resetDepositUI();
+      };
+
+      const closeDepositPanel = () => {
+        depositModal?.classList.add("is-hidden");
+        document.body.classList.remove("modal-open");
+        if (depositTimerId) {
+          clearInterval(depositTimerId);
+          depositTimerId = null;
+        }
+      };
+
+      const updateSubmitState = () => {
+        if (!submitDepositBtn) return;
+        const hasReceipts = depositState.storageKeys.length > 0;
+        const amountValue = Number(receiptAmount?.value || 0);
+        const notExpired = depositState.expiresAt ? Date.now() < depositState.expiresAt : false;
+        submitDepositBtn.disabled = !(hasReceipts && amountValue > 0 && notExpired);
+      };
+
+      const handleDepositExpired = () => {
+        depositState.status = "expired";
+        if (submitDepositBtn) submitDepositBtn.disabled = true;
+        if (addReceiptBtn) addReceiptBtn.disabled = true;
+        if (receiptAmount) receiptAmount.disabled = true;
+        setDepositStatus("زمان واریز به پایان رسید.", "error");
+        depositRetryBtn?.classList.remove("is-hidden");
+      };
+
+      const startCountdown = (expiresAt) => {
+        if (!depositCountdown) return;
+        const expiresAtMs = new Date(expiresAt).getTime();
+        if (!Number.isFinite(expiresAtMs)) return;
+        depositState.expiresAt = expiresAtMs;
+        depositTimer?.classList.remove("is-hidden");
+        const tick = () => {
+          const diff = expiresAtMs - Date.now();
+          if (diff <= 0) {
+            depositCountdown.textContent = "0:00";
+            handleDepositExpired();
+            if (depositTimerId) {
+              clearInterval(depositTimerId);
+              depositTimerId = null;
+            }
+            return;
+          }
+          const minutes = Math.floor(diff / 60000);
+          const seconds = Math.floor((diff % 60000) / 1000);
+          depositCountdown.textContent = `${minutes}:${String(seconds).padStart(2, "0")}`;
+        };
+        tick();
+        if (depositTimerId) clearInterval(depositTimerId);
+        depositTimerId = setInterval(tick, 1000);
+      };
+
+      const createDeposit = async () => {
+        if (!sessionInitData) {
+          setDepositStatus("دسترسی نامعتبر است.", "error");
+          return;
+        }
+        const amountValue = Number(depositAmount?.value || 0);
+        if (!amountValue || amountValue <= 0) {
+          setDepositStatus("مبلغ معتبر وارد کنید.", "error");
+          return;
+        }
+        if (createDepositBtn) createDepositBtn.disabled = true;
+        setDepositStatus("در حال ایجاد درخواست...");
+        try {
+          const res = await fetch(`${WORKER_BASE_URL}/api/deposits/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              initData: sessionInitData,
+              amount: depositAmount?.value,
+              currency: "OMR",
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            const message = data?.detail || data?.error || "خطا در ایجاد درخواست.";
+            setDepositStatus(message, "error");
+            return;
+          }
+          depositState.depositId = data.deposit_id;
+          depositState.status = "created";
+          if (bankName) bankName.textContent = data?.bank_details?.bank_name || "—";
+          if (bankAccount) bankAccount.textContent = data?.bank_details?.bank_account || "—";
+          if (bankIban) bankIban.textContent = data?.bank_details?.bank_iban || "—";
+          if (bankHolder) bankHolder.textContent = data?.bank_details?.bank_holder || "—";
+          depositRequest?.classList.add("is-hidden");
+          depositBody?.classList.remove("is-hidden");
+          setDepositStatus("");
+          startCountdown(data.expires_at);
+          updateSubmitState();
+        } catch (err) {
+          console.error("Deposit create error:", err);
+          setDepositStatus("خطا در ارتباط. دوباره تلاش کنید.", "error");
+        } finally {
+          if (createDepositBtn) createDepositBtn.disabled = false;
+        }
+      };
+
+      const renderReceiptThumb = (storageKey, previewUrl) => {
+        if (!receiptGrid) return;
+        const thumb = document.createElement("div");
+        thumb.className = "receipt-thumb";
+        thumb.dataset.storageKey = storageKey;
+
+        const img = document.createElement("img");
+        img.src = previewUrl;
+        img.alt = "رسید";
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "remove-receipt";
+        removeBtn.textContent = "×";
+        removeBtn.addEventListener("click", () => {
+          const key = thumb.dataset.storageKey;
+          depositState.storageKeys = depositState.storageKeys.filter((item) => item !== key);
+          URL.revokeObjectURL(previewUrl);
+          thumb.remove();
+          if (depositState.storageKeys.length === 0) {
+            receiptPlaceholder?.classList.remove("is-hidden");
+          }
+          if (depositState.storageKeys.length < MAX_RECEIPTS) {
+            addReceiptBtn?.classList.remove("is-hidden");
+          }
+          updateSubmitState();
+        });
+
+        thumb.appendChild(img);
+        thumb.appendChild(removeBtn);
+        receiptGrid.appendChild(thumb);
+        receiptPlaceholder?.classList.add("is-hidden");
+      };
+
+      const requestUploadUrl = async (file) => {
+        const res = await fetch(`${WORKER_BASE_URL}/api/deposits/upload_urls`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            initData: sessionInitData,
+            deposit_id: depositState.depositId,
+            files: [
+              {
+                mime: file.type,
+                size: file.size,
+              },
+            ],
+          }),
+        });
+        if (res.status === 501) {
+          setDepositStatus("آپلود رسید هنوز فعال نشده است.", "error");
+          return null;
+        }
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const message = data?.detail || data?.error || "خطا در دریافت لینک آپلود.";
+          setDepositStatus(message, "error");
+          return null;
+        }
+        const url = data?.urls?.[0];
+        const storageKey = data?.storage_keys?.[0];
+        if (!url || !storageKey) {
+          setDepositStatus("پاسخ نامعتبر از سرور.", "error");
+          return null;
+        }
+        return { url, storageKey };
+      };
+
+      const uploadReceipt = async (file) => {
+        if (!file) return;
+        if (!ALLOWED_RECEIPT_TYPES.includes(file.type)) {
+          setDepositStatus("فرمت تصویر مجاز نیست.", "error");
+          return;
+        }
+        if (file.size > MAX_RECEIPT_SIZE) {
+          setDepositStatus("حجم فایل بیش از حد مجاز است.", "error");
+          return;
+        }
+        if (depositState.storageKeys.length >= MAX_RECEIPTS) {
+          setDepositStatus("حداکثر ۳ تصویر مجاز است.", "error");
+          return;
+        }
+        if (!depositState.depositId) {
+          setDepositStatus("ابتدا درخواست واریز را ایجاد کنید.", "error");
+          return;
+        }
+        setDepositStatus("در حال آپلود رسید...");
+        const upload = await requestUploadUrl(file);
+        if (!upload) return;
+        const putRes = await fetch(upload.url, {
+          method: "PUT",
+          headers: { "Content-Type": file.type },
+          body: file,
+        });
+        if (!putRes.ok) {
+          setDepositStatus("آپلود ناموفق بود.", "error");
+          return;
+        }
+        depositState.storageKeys.push(upload.storageKey);
+        const previewUrl = URL.createObjectURL(file);
+        renderReceiptThumb(upload.storageKey, previewUrl);
+        if (depositState.storageKeys.length >= MAX_RECEIPTS) {
+          addReceiptBtn?.classList.add("is-hidden");
+        }
+        setDepositStatus("");
+        updateSubmitState();
+      };
+
+      const submitDeposit = async () => {
+        if (!sessionInitData || !depositState.depositId) return;
+        const amountValue = Number(receiptAmount?.value || 0);
+        if (!amountValue || amountValue <= 0) {
+          setDepositStatus("مبلغ رسید معتبر نیست.", "error");
+          return;
+        }
+        if (depositState.storageKeys.length === 0) {
+          setDepositStatus("حداقل یک رسید نیاز است.", "error");
+          return;
+        }
+        if (depositState.expiresAt && Date.now() >= depositState.expiresAt) {
+          handleDepositExpired();
+          return;
+        }
+        let submitted = false;
+        if (submitDepositBtn) submitDepositBtn.disabled = true;
+        setDepositStatus("در حال ارسال...");
+        const idempotencyKey =
+          window.crypto?.randomUUID?.() ||
+          `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        try {
+          const res = await fetch(`${WORKER_BASE_URL}/api/deposits/submit`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              initData: sessionInitData,
+              deposit_id: depositState.depositId,
+              receipt_amount: receiptAmount?.value,
+              storage_keys: depositState.storageKeys,
+              idempotency_key: idempotencyKey,
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            const message = data?.detail || data?.error || "ارسال ناموفق بود.";
+            if (String(message).toLowerCase().includes("expired")) {
+              handleDepositExpired();
+              return;
+            }
+            setDepositStatus(message, "error");
+            return;
+          }
+          depositState.status = "submitted";
+          submitted = true;
+          if (receiptAmount) receiptAmount.disabled = true;
+          if (addReceiptBtn) addReceiptBtn.disabled = true;
+          if (submitDepositBtn) submitDepositBtn.disabled = true;
+          setDepositStatus("درخواست واریز ثبت شد و پس از بررسی تأیید خواهد شد.", "success");
+          loadBalance(sessionInitData);
+        } catch (err) {
+          console.error("Deposit submit error:", err);
+          setDepositStatus("خطا در ارتباط. دوباره تلاش کنید.", "error");
+        } finally {
+          if (submitDepositBtn && !submitted) submitDepositBtn.disabled = false;
+        }
+      };
+
       const loadSession = async () => {
         const initData = window.Telegram?.WebApp?.initData || "";
         if (!initData) {
@@ -587,6 +1250,7 @@
             showGate("ابتدا ثبت نام را تکمیل کنید.");
             return;
           }
+          sessionInitData = initData;
           const firstName =
             data?.user?.first_name ||
             data?.telegram_user?.first_name ||
@@ -599,6 +1263,24 @@
           showGate("خطا در ارتباط. دوباره تلاش کنید.");
         }
       };
+
+      depositAction?.addEventListener("click", openDepositPanel);
+      depositClose?.addEventListener("click", closeDepositPanel);
+      depositModal?.addEventListener("click", (event) => {
+        if (event.target === depositModal) closeDepositPanel();
+      });
+      createDepositBtn?.addEventListener("click", createDeposit);
+      addReceiptBtn?.addEventListener("click", () => {
+        receiptInput?.click();
+      });
+      receiptInput?.addEventListener("change", (event) => {
+        const file = event.target.files?.[0] || null;
+        if (file) uploadReceipt(file);
+        if (receiptInput) receiptInput.value = "";
+      });
+      receiptAmount?.addEventListener("input", updateSubmitState);
+      submitDepositBtn?.addEventListener("click", submitDeposit);
+      depositRetryBtn?.addEventListener("click", resetDepositUI);
 
       updateProgress();
       if (window.Telegram?.WebApp) {
