@@ -1116,11 +1116,16 @@
           setResult("");
       };
       startBtn?.addEventListener("click", enterFormMode);
-      const normalizePhone = (value) => (value || "").replace(/\s+/g, "");
+      const normalizePhone = (value) =>
+        (value || "")
+          .replace(/[^\d+]/g, "")   // remove ALL non-digits safely
+          .trim();
+
       const validatePhone = (value) => {
-          const v = normalizePhone(value);
-          return /^[+]?\\d{8,15}$/.test(v);
+        const v = normalizePhone(value);
+        return /^[+]?\d{8,15}$/.test(v);
       };
+
       async function fetchPhoneFromBackend() {
           const initData = window.Telegram?.WebApp?.initData;
           if (!initData) return null;
@@ -1189,7 +1194,7 @@
           }
           const firstName = document.getElementById("first-name")?.value?.trim() || "";
           const lastName = document.getElementById("last-name")?.value?.trim() || "";
-          const phone = phoneInput?.value?.trim() || "";
+          const phone = normalizePhone(phoneInput?.value || "");
           const country = document.getElementById("country")?.value || "";
           console.log({
             firstName,
