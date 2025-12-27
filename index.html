@@ -747,8 +747,9 @@
       <div class="controls"></div>
       <div id="result" class="result" aria-live="polite"></div>
       
+      <!--- <h3 class="form-title">ثبت‌نام در صرافی اسفندیاری</h3> --->
       <div class="form-panel" id="register-panel" aria-label="فرم ثبت نام" role="form">
-        <h3 class="form-title">ثبت‌نام در صرافی اسفندیاری</h3>
+        
         <div class="field" style="--idx:0"><input id="first-name" name="first_name" type="text" class="input-box" placeholder="نام" autocomplete="given-name" /></div>
         <div class="field" style="--idx:1"><input id="last-name" name="last_name" type="text" class="input-box" placeholder="نام خانوادگی" autocomplete="family-name" /></div>
         <div class="field" style="--idx:2">
@@ -1091,7 +1092,7 @@
           if (formMode) return;
           formMode = true;
           clearInterval(autoplay);
-          window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("soft");
+          window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
           window.Telegram?.WebApp?.MainButton?.hide();
           window.Telegram?.WebApp?.expand?.();
           document.body.classList.add("form-active");
@@ -1177,12 +1178,12 @@
           const phone = phoneInput?.value?.trim() || "";
           const country = document.getElementById("country")?.value || "";
           if (!firstName || !lastName || !phone || !country || !acceptTerms?.checked || !confirmIdentity?.checked) {
-              window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+              window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("warning");
               setResult("لطفاً همه فیلدها را تکمیل و تیک‌ها را فعال کنید.", true);
               return;
           }
           if (!validatePhone(phone)) {
-              window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+              window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("warning");
               setResult("شماره موبایل معتبر نیست.", true);
               return;
           }
@@ -1222,7 +1223,7 @@
               if (!res.ok) {
                   const msg = typeof data === "string" ? data : data?.error || data?.message || `خطا (${res.status})`;
                   setResult(msg, true);
-                  window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+                  window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("warning");
                   return;
               }
               setResult(typeof data === "string" ? data : JSON.stringify(data, null, 2));
@@ -1231,7 +1232,7 @@
               console.error("Register error:", err);
               const msg = err?.message ? `خطای شبکه: ${err.message}` : "خطای شبکه";
               setResult(msg, true);
-              window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("warning");
+              window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("warning");
           } finally {
               registerSubmit.disabled = false;
               if (originalText) registerSubmit.textContent = originalText;
