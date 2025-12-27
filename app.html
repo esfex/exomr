@@ -418,13 +418,13 @@
                 <circle cx="12" cy="12" r="8"></circle>
                 <path d="M8 12h8"></path>
               </svg>
-              موجودی ریال عمانی
+              موجودی قابل برداشت
             </div>
-            <div class="summary-label">کیف پول اصلی</div>
+            <div class="summary-label">در دسترس</div>
           </div>
           <div class="summary-amount">
-            <div class="summary-main">۳٬۹۸۰ ر.ع</div>
-            <div class="summary-sub">معادل ۱۰٬۳۵۰ دلار</div>
+            <div class="summary-main" id="available-main">۰ ر.ع</div>
+            <div class="summary-sub" id="available-sub">معادل $0.00</div>
           </div>
         </div>
         <div class="summary-row">
@@ -434,13 +434,13 @@
                 <path d="M12 3l7 4v10l-7 4-7-4V7z"></path>
                 <path d="M12 3v18"></path>
               </svg>
-              موجودی دلاری
+              موجودی مسدود
             </div>
-            <div class="summary-label">جمع دارایی</div>
+            <div class="summary-label">رزرو شده</div>
           </div>
           <div class="summary-amount">
-            <div class="summary-main">$2,420.00</div>
-            <div class="summary-sub">معادل ۹۳۱ ر.ع</div>
+            <div class="summary-main" id="locked-main">۰ ر.ع</div>
+            <div class="summary-sub" id="locked-sub">معادل $0.00</div>
           </div>
         </div>
       </section>
@@ -485,9 +485,14 @@
       const userPill = document.getElementById("user-pill");
       const progressRemaining = document.getElementById("progress-remaining");
       const arcProgress = document.querySelector(".arc-progress");
+      const availableMain = document.getElementById("available-main");
+      const availableSub = document.getElementById("available-sub");
+      const lockedMain = document.getElementById("locked-main");
+      const lockedSub = document.getElementById("locked-sub");
 
       const stepsTotal = 5;
       const stepsCompleted = 2;
+      const USD_PER_OMR = 2.6;
 
       const showGate = (message) => {
         if (gateMessage && message) gateMessage.textContent = message;
@@ -509,6 +514,56 @@
         const length = arcProgress.getTotalLength();
         const progress = stepsTotal > 0 ? Math.min(stepsCompleted / stepsTotal, 1) : 0;
         arcProgress.style.strokeDasharray = `${length * progress} ${length}`;
+      };
+
+      const parseAmount = (value) => {
+        if (typeof value === "number") return value;
+        if (typeof value === "string") return Number(value);
+        return 0;
+      };
+
+      const formatNumber = (value, decimals) => {
+        const safe = Number.isFinite(value) ? value : 0;
+        return new Intl.NumberFormat("fa-IR", {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        }).format(safe);
+      };
+
+      const renderBalance = (availableAmount, lockedAmount) => {
+        const availableSafe = Number.isFinite(availableAmount) ? availableAmount : 0;
+        const lockedSafe = Number.isFinite(lockedAmount) ? lockedAmount : 0;
+        const availableUsd = availableSafe * USD_PER_OMR;
+        const lockedUsd = lockedSafe * USD_PER_OMR;
+        if (availableMain) {
+          availableMain.textContent = `${formatNumber(availableSafe, 3)} ر.ع`;
+        }
+        if (availableSub) {
+          availableSub.textContent = `معادل $${formatNumber(availableUsd, 2)}`;
+        }
+        if (lockedMain) {
+          lockedMain.textContent = `${formatNumber(lockedSafe, 3)} ر.ع`;
+        }
+        if (lockedSub) {
+          lockedSub.textContent = `معادل $${formatNumber(lockedUsd, 2)}`;
+        }
+      };
+
+      const loadBalance = async (initData) => {
+        try {
+          const res = await fetch(`${WORKER_BASE_URL}/api/balance`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ initData, currency: "OMR" }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data) return;
+          const available = parseAmount(data.available);
+          const locked = parseAmount(data.locked);
+          renderBalance(available, locked);
+        } catch (err) {
+          console.error("Balance fetch error:", err);
+        }
       };
 
       const loadSession = async () => {
@@ -538,6 +593,7 @@
             "User";
           if (userPill) userPill.textContent = firstName;
           showApp();
+          loadBalance(initData);
         } catch (err) {
           console.error("Session check error:", err);
           showGate("خطا در ارتباط. دوباره تلاش کنید.");
