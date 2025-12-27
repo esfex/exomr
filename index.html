@@ -911,6 +911,20 @@
       const closeTermsBtn = document.getElementById("close-terms");
       const WORKER_BASE_URL = "https://cf-init.esfex.workers.dev";
       const phoneBtnDefaultText = phoneBtn?.textContent || "";
+
+      function hapticImpact(style = "light") {
+          try {
+            Telegram?.WebApp?.HapticFeedback?.impactOccurred(style);
+          } catch {}
+        }
+
+        function hapticNotify(type = "success") {
+          try {
+            Telegram?.WebApp?.HapticFeedback?.notificationOccurred(type);
+          } catch {}
+        }
+
+
       let index = 0;
       let pullStartY = 0;
       let pulling = false;
